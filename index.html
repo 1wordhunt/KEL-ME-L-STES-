@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelime Projesi v6.0</title>
+    <title>Kelime Projesi v7.0</title>
     <style>
         :root { --bg-dark: #121212; --card-grey: #181818; --inner-grey: #282828; --main-green: #1DB954; }
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
@@ -186,13 +186,25 @@
             list.appendChild(item);
         });
 
+        // URL PARAMETRE KONTROLÜ (QR İÇİN)
+        window.onload = () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const wParam = urlParams.get('w');
+            if (wParam) {
+                const found = wordData.find(x => x.en.toLowerCase() === wParam.toLowerCase());
+                if (found) openView(found);
+            }
+        };
+
         function openView(w) {
             activeWord = w.en;
             document.getElementById('txtEn').innerText = w.en.toUpperCase();
             document.getElementById('txtTr').innerText = `(${w.tr})`;
             document.getElementById('pBtn').innerText = "⏸";
+            
             const img = w.img ? w.img : "https://via.placeholder.com/150?text=None";
             document.getElementById('boxImg').innerHTML = `<img src="${img}">`;
+            
             if(w.vid) {
                 document.getElementById('boxVid').innerHTML = `
                     <video id="vPlayer" width="100%" height="100%" autoplay loop playsinline>
@@ -203,6 +215,7 @@
             } else {
                 document.getElementById('boxVid').innerHTML = `<p style="font-size:12px;color:#666">No Clip</p>`;
             }
+            
             document.getElementById('page-overlay').style.display = 'flex';
             tts(w.en);
         }
@@ -228,14 +241,5 @@
             document.getElementById('page-overlay').style.display = 'none';
             document.getElementById('boxVid').innerHTML = '';
             window.speechSynthesis.cancel();
-        }
-
-        function tts(s) {
-            window.speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(s);
-            u.lang = 'en-US';
-            window.speechSynthesis.speak(u);
-        }
-    </script>
-</body>
-</html>
+            // URL'deki parametreyi temizle (sayfa kapanınca link sadeleşsin)
+            window.history.replaceState({}, document.title, window.location
