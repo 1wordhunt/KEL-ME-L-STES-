@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelime Projesi</title>
+    <title>Kelime Projesi v7.5 - QR & Full List</title>
     <style>
         :root { --bg-dark: #121212; --card-grey: #181818; --inner-grey: #282828; --main-green: #1DB954; }
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
@@ -19,7 +19,6 @@
         .word-header span { font-size: 18px; opacity: 0.6; margin-left: 10px; }
         .media-row { display: flex; gap: 10px; width: 100%; }
         .media-box { flex: 1; height: 150px; background: #333; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; }
-        .media-box img { width: 100%; height: 100%; object-fit: cover; }
         .spotify-card { background: var(--card-grey); border-radius: 35px; padding: 30px; color: white; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
         .player-view { height: 180px; background: var(--inner-grey); border-radius: 20px; margin-bottom: 25px; overflow: hidden; position: relative; }
         .player-view video { width: 100%; height: 100%; object-fit: contain; }
@@ -33,7 +32,7 @@
 </head>
 <body>
 
-    <h1 style="text-align:center">İngilizce 100 Kelime (Klasör Düzeltildi)</h1>
+    <h1 style="text-align:center">İngilizce 100 Kelime - Burak Dev</h1>
     <div class="list-container" id="list"></div>
 
     <div id="page-overlay">
@@ -44,9 +43,11 @@
                 <span id="txtTr">(Türkçe)</span>
             </div>
             <div class="media-row">
-                <div class="media-box" id="boxImg"></div>
+                <div class="media-box" id="boxImg">
+                     <div style="color:white; font-size:10px;">VİDEOLAR KLASÖRÜNDEN OKUNUYOR</div>
+                </div>
                 <div class="media-box" style="background:#1a1a1a; color:#555; font-size:12px; display:flex; align-items:center; justify-content:center;">
-                    <b>ŞARKI KISMI</b>
+                    <b>BURAK DEVELOPER</b>
                 </div>
             </div>
             <div class="spotify-card">
@@ -65,8 +66,6 @@
 
     <script>
         let currentIndex = 0;
-        
-        
         const wordData = [
             {en:"time", tr:"zaman", vid:"VID-20260326-WA0029.mp4"},
             {en:"year", tr:"yıl", vid:"VID-20260326-WA0030.mp4"},
@@ -103,7 +102,7 @@
             {en:"look", tr:"bakmak", vid:"VID-20260326-WA0061.mp4"},
             {en:"want", tr:"istemek", vid:"VID-20260326-WA0062.mp4"},
             {en:"find", tr:"bulmak", vid:"VID-20260326-WA0063.mp4"},
-            {en:"tell", tr:"söylemek", vid:"VID-20260326-WA0064.mp4"},
+            {en:"tell", tr:"anlatmak", vid:"VID-20260326-WA0064.mp4"},
             {en:"ask", tr:"sormak", vid:"VID-20260326-WA0065.mp4"},
             {en:"try", tr:"denemek", vid:"VID-20260326-WA0066.mp4"},
             {en:"need", tr:"ihtiyaç", vid:"VID-20260326-WA0067.mp4"},
@@ -174,25 +173,43 @@
         wordData.forEach((w, i) => {
             let item = document.createElement('div');
             item.className = 'word-item';
-            item.innerHTML = `<div class="word-text" onclick='openView(${i})'><b>${i + 1}.</b> ${w.en} <span class="word-tr">${w.tr}</span></div><span class="listen-icon" onclick="event.stopPropagation(); tts('${w.en}')">🔊</span>`;
+            item.onclick = () => openView(i, true);
+            item.innerHTML = `<div class="word-text"><b>${i + 1}.</b> ${w.en} <span class="word-tr">${w.tr}</span></div><span class="listen-icon" onclick="event.stopPropagation(); tts('${w.en}')">🔊</span>`;
             list.appendChild(item);
         });
 
-        function openView(index) {
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const wordParam = urlParams.get('kelime');
+            if (wordParam) {
+                const index = wordData.findIndex(w => w.en.toLowerCase() === wordParam.toLowerCase());
+                if (index !== -1) openView(index, false);
+            }
+        };
+
+        function openView(index, updateUrl) {
             currentIndex = index;
             const w = wordData[currentIndex];
+            if(updateUrl) {
+                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?kelime=' + w.en;
+                window.history.pushState({path:newUrl},'',newUrl);
+            }
             document.getElementById('txtEn').innerText = w.en.toUpperCase();
             document.getElementById('txtTr').innerText = `(${w.tr})`;
-            
-            
             if(w.vid) {
                 document.getElementById('videoArea').innerHTML = `<video id="vPlayer" autoplay loop playsinline ontimeupdate="updateProgress()"><source src="videolar/${w.vid}" type="video/mp4"></video>`;
                 document.getElementById('pBtn').innerText = "⏸";
-            } else {
-                document.getElementById('videoArea').innerHTML = `<p style="color:#555; text-align:center; padding-top:70px;">Video Yok</p>`;
             }
             document.getElementById('page-overlay').style.display = 'flex';
             tts(w.en);
+        }
+
+        function closeView() {
+            document.getElementById('page-overlay').style.display = 'none';
+            document.getElementById('videoArea').innerHTML = '';
+            const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.pushState({path:cleanUrl},'',cleanUrl);
+            window.speechSynthesis.cancel();
         }
 
         function updateProgress() {
@@ -211,13 +228,7 @@
 
         function changeWord(dir) {
             currentIndex = (currentIndex + dir + wordData.length) % wordData.length;
-            openView(currentIndex);
-        }
-
-        function closeView() {
-            document.getElementById('page-overlay').style.display = 'none';
-            document.getElementById('videoArea').innerHTML = '';
-            window.speechSynthesis.cancel();
+            openView(currentIndex, true);
         }
 
         function tts(s) {
