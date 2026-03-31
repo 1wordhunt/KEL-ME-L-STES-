@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelime Projesi v6.0 - Burak Developer</title>
+    <title>Kelime Projesi</title>
     <style>
         :root { --bg-dark: #121212; --card-grey: #181818; --inner-grey: #282828; --main-green: #1DB954; }
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
@@ -46,7 +46,7 @@
             <div class="media-row">
                 <div class="media-box" id="boxImg"></div>
                 <div class="media-box" style="background:#1a1a1a; color:#555; font-size:12px; display:flex; align-items:center; justify-content:center;">
-                    <b>BURAK DEV</b>
+                    <b>ŞARKI KISMI</b>
                 </div>
             </div>
             <div class="spotify-card">
@@ -66,7 +66,7 @@
     <script>
         let currentIndex = 0;
         
-        // Burak, 'videolar/' eklemesi yapıldı.
+        
         const wordData = [
             {en:"time", tr:"zaman", vid:"VID-20260326-WA0029.mp4"},
             {en:"year", tr:"yıl", vid:"VID-20260326-WA0030.mp4"},
@@ -184,7 +184,7 @@
             document.getElementById('txtEn').innerText = w.en.toUpperCase();
             document.getElementById('txtTr').innerText = `(${w.tr})`;
             
-            // BURASI ÖNEMLİ: Videoları 'videolar/' klasöründen çeker.
+            
             if(w.vid) {
                 document.getElementById('videoArea').innerHTML = `<video id="vPlayer" autoplay loop playsinline ontimeupdate="updateProgress()"><source src="videolar/${w.vid}" type="video/mp4"></video>`;
                 document.getElementById('pBtn').innerText = "⏸";
