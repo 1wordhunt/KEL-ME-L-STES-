@@ -3,49 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelime Projesi v8.5 - QR Bağlantı Koruma</title>
+    <title>Eskal Kelime Projesi</title>
     <style>
-        :root { --bg-dark: #121212; --card-grey: #181818; --inner-grey: #282828; --main-green: #1DB954; }
+        :root { --bg-black: #000000; --card-dark: #121212; --inner-grey: #282828; --text-grey: #b3b3b3; }
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
-        .list-container { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-        .word-item { background: white; padding: 18px; border-radius: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.2s; }
-        .word-item:active { transform: scale(0.98); }
-        .word-text { font-size: 17px; font-weight: 600; flex-grow: 1; }
-        .word-tr { font-size: 14px; color: #888; margin-left: 8px; font-weight: 400; }
-        #page-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
-        .content-container { width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; }
-        .player-view { height: 250px; background: black; border-radius: 20px; margin-bottom: 25px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .player-view video { width: 100%; height: 100%; object-fit: contain; }
-        .spotify-card { background: var(--card-grey); border-radius: 35px; padding: 30px; color: white; }
-        .progress-bar { width: 100%; height: 4px; background: #4f4f4f; border-radius: 2px; margin: 25px 0 15px 0; }
+        
+        /* Liste Tasarımı */
+        .list-container { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+        .word-item { background: white; padding: 15px; border-radius: 12px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .word-text { font-size: 16px; font-weight: 600; }
+        .word-tr { font-size: 14px; color: #888; margin-left: 5px; }
+
+        /* Overlay - Resimdeki Koyu Tema */
+        #page-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-black); z-index: 1000; justify-content: center; align-items: center; }
+        .close-x { position: absolute; top: 20px; right: 20px; font-size: 24px; color: white; cursor: pointer; }
+
+        /* Ana Kart Yapısı (Resimdeki Düzen) */
+        .content-container { width: 90%; max-width: 400px; color: white; }
+        
+        /* Başlık Alanı */
+        .header-area { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 30px; }
+        .header-area h1 { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: 1px; }
+        .header-area span { color: var(--text-grey); font-size: 18px; }
+
+        /* Üstteki İki Kutu (Resim ve Film Yazısı) */
+        .top-row { display: flex; gap: 15px; margin-bottom: 20px; height: 160px; }
+        .img-box { flex: 1; background: white; border-radius: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .img-box img { width: 80%; height: auto; object-fit: contain; }
+        .film-box { flex: 1; background: var(--inner-grey); border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center; color: var(--text-grey); font-size: 12px; font-weight: bold; }
+
+        /* Alttaki Büyük Video Alanı */
+        .player-container { background: var(--card-dark); border-radius: 30px; padding: 20px; position: relative; }
+        .video-box { width: 100%; height: 200px; background: #1a1a1a; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
+        .video-box video { width: 100%; height: 100%; object-fit: contain; }
+
+        /* Kontroller */
+        .progress-area { margin: 15px 0; }
+        .bar-bg { width: 100%; height: 4px; background: #4f4f4f; border-radius: 2px; position: relative; }
         .bar-fill { width: 0%; height: 100%; background: white; border-radius: 2px; }
-        .controls { display: flex; justify-content: space-between; align-items: center; }
-        .btn-side { background: none; border: none; font-size: 22px; color: #b3b3b3; cursor: pointer; }
-        .btn-main { background: white; color: black; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; border: none; cursor: pointer; }
-        .close-x { position: absolute; top: 20px; right: 20px; font-size: 26px; color: #b3b3b3; cursor: pointer; z-index: 1001; }
+        .dot { width: 10px; height: 10px; background: white; border-radius: 50%; position: absolute; top: -3px; left: 0%; transform: translateX(-50%); }
+
+        .control-btns { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+        .btn-s { background: none; border: none; color: #b3b3b3; font-size: 20px; cursor: pointer; }
+        .btn-p { width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; color: black; font-size: 24px; }
     </style>
 </head>
 <body>
 
-    <h1 style="text-align:center">100 Kelime (QR Uyumlu)</h1>
+    <h1 style="text-align:center">100 Kelime - Burak Developer</h1>
     <div class="list-container" id="list"></div>
 
     <div id="page-overlay">
         <div class="close-x" onclick="closeView()">✕</div>
+        
         <div class="content-container">
-            <div style="color: white; text-align: center; margin-bottom: 10px;">
-                <h1 id="txtEn" style="margin:0; font-size:32px;">WORD</h1>
-                <span id="txtTr" style="opacity:0.6;">(Türkçe)</span>
+            <div class="header-area">
+                <h1 id="txtEn">TIME</h1>
+                <span id="txtTr">(zaman)</span>
+                <span style="color:#1DB954; font-size:20px; cursor:pointer;" onclick="ttsFromOverlay()">🔊</span>
             </div>
-            <div class="spotify-card">
-                <div class="player-view" id="videoArea"></div>
-                <div class="progress-bar"><div class="bar-fill" id="pFill"></div></div>
-                <div class="controls">
-                    <button class="btn-side">🔀</button>
-                    <button class="btn-side" onclick="changeWord(-1)">⏮</button>
-                    <button id="pBtn" class="btn-main" onclick="playHandler()">▶</button>
-                    <button class="btn-side" onclick="changeWord(1)">⏭</button>
-                    <button class="btn-side">🔁</button>
+
+            <div class="top-row">
+                <div class="img-box">
+                    <img id="wordImg" src="https://cdn-icons-png.flaticon.com/512/2784/2784459.png" alt="word">
+                </div>
+                <div class="film-box">
+                    ŞARKI EKLENECEK
+                </div>
+            </div>
+
+            <div class="player-container">
+                <div class="video-box" id="videoArea"></div>
+                
+                <div class="progress-area">
+                    <div class="bar-bg">
+                        <div class="bar-fill" id="pFill"></div>
+                        <div class="dot" id="pDot"></div>
+                    </div>
+                </div>
+
+                <div class="control-btns">
+                    <button class="btn-s">🔀</button>
+                    <button class="btn-s" onclick="changeWord(-1)">⏮</button>
+                    <button id="pBtn" class="btn-p" onclick="playHandler()">▶</button>
+                    <button class="btn-s" onclick="changeWord(1)">⏭</button>
+                    <button class="btn-s">🔁</button>
                 </div>
             </div>
         </div>
@@ -53,6 +95,7 @@
 
     <script>
         let currentIndex = 0;
+        // Kelime listesi (İlk 100 kelime ve videoların tam listesi)
         const wordData = [
             {en:"time", tr:"zaman", vid:"VID-20260326-WA0029.mp4"},
             {en:"year", tr:"yıl", vid:"VID-20260326-WA0030.mp4"},
@@ -161,11 +204,10 @@
             let item = document.createElement('div');
             item.className = 'word-item';
             item.onclick = () => openView(i, true);
-            item.innerHTML = `<div class="word-text"><b>${i + 1}.</b> ${w.en} <span class="word-tr">${w.tr}</span></div><span class="listen-icon" onclick="event.stopPropagation(); tts('${w.en}')">🔊</span>`;
+            item.innerHTML = `<div class="word-text"><b>${i + 1}.</b> ${w.en} <span class="word-tr">${w.tr}</span></div><span>🔊</span>`;
             list.appendChild(item);
         });
 
-        // QR BAĞLANTILARI BURADA KORUNUYOR
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const wordParam = urlParams.get('kelime');
@@ -182,14 +224,20 @@
                 const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?kelime=' + w.en;
                 window.history.pushState({path:newUrl},'',newUrl);
             }
+
             document.getElementById('txtEn').innerText = w.en.toUpperCase();
             document.getElementById('txtTr').innerText = `(${w.tr})`;
+            
+            // Video (Durmuş başlar, preload açık)
             if(w.vid) {
-                document.getElementById('videoArea').innerHTML = `<video id="vPlayer" loop playsinline preload="auto" ontimeupdate="updateProgress()"><source src="videolar/${w.vid}" type="video/mp4"></video>`;
+                document.getElementById('videoArea').innerHTML = `
+                <video id="vPlayer" loop playsinline preload="auto" ontimeupdate="updateProgress()">
+                    <source src="videolar/${w.vid}" type="video/mp4">
+                </video>`;
                 document.getElementById('pBtn').innerText = "▶"; 
             }
+
             document.getElementById('page-overlay').style.display = 'flex';
-            tts(w.en);
         }
 
         function playHandler() {
@@ -200,6 +248,20 @@
             }
         }
 
+        function updateProgress() {
+            const v = document.getElementById('vPlayer');
+            if(v && v.duration) {
+                let perc = (v.currentTime / v.duration) * 100;
+                document.getElementById('pFill').style.width = perc + "%";
+                document.getElementById('pDot').style.left = perc + "%";
+            }
+        }
+
+        function changeWord(dir) {
+            currentIndex = (currentIndex + dir + wordData.length) % wordData.length;
+            openView(currentIndex, true);
+        }
+
         function closeView() {
             document.getElementById('page-overlay').style.display = 'none';
             document.getElementById('videoArea').innerHTML = '';
@@ -208,19 +270,9 @@
             window.speechSynthesis.cancel();
         }
 
-        function updateProgress() {
-            const v = document.getElementById('vPlayer');
-            if(v && v.duration) document.getElementById('pFill').style.width = (v.currentTime / v.duration) * 100 + "%";
-        }
-
-        function changeWord(dir) {
-            currentIndex = (currentIndex + dir + wordData.length) % wordData.length;
-            openView(currentIndex, true);
-        }
-
-        function tts(s) {
+        function ttsFromOverlay() {
             window.speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(s);
+            const u = new SpeechSynthesisUtterance(wordData[currentIndex].en);
             u.lang = 'en-US';
             window.speechSynthesis.speak(u);
         }
