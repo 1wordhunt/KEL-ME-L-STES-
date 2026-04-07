@@ -8,53 +8,40 @@
         :root { --bg-black: #000000; --card-dark: #121212; --inner-grey: #282828; --text-grey: #b3b3b3; }
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
         
-        /* Liste Tasarımı */
+        /* Ana Liste - Parantezli Tasarım */
         .list-container { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
         .word-item { background: white; padding: 15px; border-radius: 12px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        
+        .word-text { font-size: 16px; font-weight: 600; }
+        .word-tr { font-size: 14px; color: #888; margin-left: 5px; font-weight: 400; }
+
         /* Pop-up Overlay */
         #page-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-black); z-index: 1000; justify-content: center; align-items: center; }
         .content-container { width: 90%; max-width: 400px; color: white; }
         
-        /* Üst Kısımlar (Resimdeki Düzen) */
         .header-area { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 25px; }
         .top-row { display: flex; gap: 15px; margin-bottom: 20px; height: 150px; }
         .img-box { flex: 1; background: white; border-radius: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .img-box img { width: 70%; height: auto; }
-        .film-box { flex: 1; background: var(--inner-grey); border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 15px; text-align: center; color: var(--text-grey); font-size: 11px; }
+        .img-box img { width: 75%; height: auto; object-fit: contain; }
+        .film-box { flex: 1; background: var(--inner-grey); border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 15px; text-align: center; color: var(--text-grey); font-size: 11px; text-transform: uppercase; }
 
-        /* Video Alanı - SHORTS SORUNU ÇÖZÜMÜ */
+        /* Video Oynatıcı Alanı */
         .player-container { background: var(--card-dark); border-radius: 30px; padding: 20px; }
-        .video-box { 
-            width: 100%; 
-            height: 220px; 
-            background: #000; 
-            border-radius: 20px; 
-            overflow: hidden; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-        }
-        /* Video tipine bakmaksızın kutuya sığdırır, taşma yapmaz */
-        .video-box video { 
-            max-width: 100%; 
-            max-height: 100%; 
-            object-fit: contain !important; 
-        }
+        .video-box { width: 100%; height: 220px; background: #000; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .video-box video { max-width: 100%; max-height: 100%; object-fit: contain !important; }
 
-        /* İlerleme Çubuğu ve Butonlar */
+        /* Kontroller */
         .progress-area { margin: 20px 0; }
         .bar-bg { width: 100%; height: 4px; background: #333; border-radius: 2px; position: relative; }
         .bar-fill { width: 0%; height: 100%; background: #fff; border-radius: 2px; }
         .dot { width: 12px; height: 12px; background: #fff; border-radius: 50%; position: absolute; top: -4px; left: 0%; transform: translateX(-50%); }
         .control-btns { display: flex; justify-content: space-between; align-items: center; }
-        .btn-p { width: 65px; height: 65px; background: #fff; border-radius: 50%; border: none; font-size: 24px; cursor: pointer; }
+        .btn-p { width: 65px; height: 65px; background: #fff; border-radius: 50%; border: none; font-size: 24px; cursor: pointer; color: black; display: flex; align-items: center; justify-content: center; }
         .close-x { position: absolute; top: 20px; right: 20px; font-size: 30px; color: #fff; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <h1 style="text-align:center">Eskal Kelime projesi</h1>
+    <h1 style="text-align:center">Eskal Kelime Projesi</h1>
     <div class="list-container" id="list"></div>
 
     <div id="page-overlay">
@@ -65,7 +52,9 @@
             </div>
 
             <div class="top-row">
-                <div class="img-box"><img id="wordImg" src="https://cdn-icons-png.flaticon.com/512/2784/2784459.png"></div>
+                <div class="img-box">
+                    <img id="wordImg" src="https://cdn-icons-png.flaticon.com/512/2589/2589174.png" alt="icon">
+                </div>
                 <div class="film-box">BURAYA ŞARKI EKLENECEK</div>
             </div>
 
@@ -87,7 +76,7 @@
 
     <script>
         let currentIndex = 0;
-        // Tüm kelime datası ve video isimleri burada
+        // Kelime listesi - Dosya adlarına dikkat et (WA0029.mp4 gibi)
         const wordData = [
             {en:"time", tr:"zaman", vid:"VID-20260326-WA0029.mp4"},
             {en:"year", tr:"yıl", vid:"VID-20260326-WA0030.mp4"},
@@ -191,17 +180,17 @@
             {en:"strongly", tr:"güçlüce", vid:"VID-20260326-WA0011.mp4"}
         ];
 
-        // Listeyi Render Et
+        // Listeyi Render Et (İstenen Parantezli Görünüm)
         const list = document.getElementById('list');
         wordData.forEach((w, i) => {
             let item = document.createElement('div');
             item.className = 'word-item';
             item.onclick = () => openView(i, true);
-            item.innerHTML = `<div class="word-text"><b>${i+1}.</b> ${w.en} <span class="word-tr">${w.tr}</span></div><span>🔊</span>`;
+            // Burada parantezli görünümü sağladım
+            item.innerHTML = `<div class="word-text"><b>${i+1}.</b> ${w.en} <span class="word-tr">(${w.tr})</span></div><span style="color:#1DB954">🔊</span>`;
             list.appendChild(item);
         });
 
-        // URL Kontrolü (QR için)
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const wordParam = urlParams.get('kelime');
@@ -222,29 +211,23 @@
             document.getElementById('txtEn').innerText = w.en.toUpperCase();
             document.getElementById('txtTr').innerText = `(${w.tr})`;
             
-            // Video Alanı (Hata Kontrollü)
-            if(w.vid) {
-                document.getElementById('videoArea').innerHTML = `
-                <video id="vPlayer" loop playsinline preload="auto" ontimeupdate="updateProgress()" onerror="videoError()">
+            // Video Alanı (Daha güvenli yükleme)
+            const videoArea = document.getElementById('videoArea');
+            videoArea.innerHTML = `
+                <video id="vPlayer" loop playsinline preload="auto" ontimeupdate="updateProgress()">
                     <source src="videolar/${w.vid}" type="video/mp4">
-                    Tarayıcınız videoyu desteklemiyor.
                 </video>`;
-                document.getElementById('pBtn').innerText = "▶"; 
-            }
-
+            
+            document.getElementById('pBtn').innerText = "▶"; 
             document.getElementById('page-overlay').style.display = 'flex';
         }
 
         function playHandler() {
             const v = document.getElementById('vPlayer');
             if(v) {
-                if (v.paused) { v.play(); document.getElementById('pBtn').innerText = "⏸"; }
+                if (v.paused) { v.play().catch(e => console.log("Hata:", e)); document.getElementById('pBtn').innerText = "⏸"; }
                 else { v.pause(); document.getElementById('pBtn').innerText = "▶"; }
             }
-        }
-
-        function videoError() {
-            document.getElementById('videoArea').innerHTML = "<div style='color:red; font-size:12px; padding:20px;'>Video bulunamadı veya yüklenemedi! Dosya adını kontrol et.</div>";
         }
 
         function updateProgress() {
