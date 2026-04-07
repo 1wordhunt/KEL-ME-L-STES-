@@ -3,25 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelime Projesi</title>
+    <title>Kelime Projesi v8.5 - QR Bağlantı Koruma</title>
     <style>
         :root { --bg-dark: #121212; --card-grey: #181818; --inner-grey: #282828; --main-green: #1DB954; }
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
         .list-container { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-        .word-item { background: white; padding: 18px; border-radius: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .word-item { background: white; padding: 18px; border-radius: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.2s; }
+        .word-item:active { transform: scale(0.98); }
         .word-text { font-size: 17px; font-weight: 600; flex-grow: 1; }
         .word-tr { font-size: 14px; color: #888; margin-left: 8px; font-weight: 400; }
-        .listen-icon { font-size: 20px; color: var(--main-green); padding: 5px; cursor: pointer; }
         #page-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
         .content-container { width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; }
-        .word-header { color: white; text-align: center; margin-bottom: 10px; }
-        .word-header h1 { margin: 0; font-size: 32px; font-weight: 800; display: inline-block; }
-        .word-header span { font-size: 18px; opacity: 0.6; margin-left: 10px; }
-        .media-row { display: flex; gap: 10px; width: 100%; }
-        .media-box { flex: 1; height: 150px; background: #333; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; }
-        .spotify-card { background: var(--card-grey); border-radius: 35px; padding: 30px; color: white; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .player-view { height: 180px; background: var(--inner-grey); border-radius: 20px; margin-bottom: 25px; overflow: hidden; position: relative; }
+        .player-view { height: 250px; background: black; border-radius: 20px; margin-bottom: 25px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
         .player-view video { width: 100%; height: 100%; object-fit: contain; }
+        .spotify-card { background: var(--card-grey); border-radius: 35px; padding: 30px; color: white; }
         .progress-bar { width: 100%; height: 4px; background: #4f4f4f; border-radius: 2px; margin: 25px 0 15px 0; }
         .bar-fill { width: 0%; height: 100%; background: white; border-radius: 2px; }
         .controls { display: flex; justify-content: space-between; align-items: center; }
@@ -32,23 +27,15 @@
 </head>
 <body>
 
-    <h1 style="text-align:center">İngilizce 100 Kelime - Burak Dev</h1>
+    <h1 style="text-align:center">100 Kelime (QR Uyumlu)</h1>
     <div class="list-container" id="list"></div>
 
     <div id="page-overlay">
         <div class="close-x" onclick="closeView()">✕</div>
         <div class="content-container">
-            <div class="word-header">
-                <h1 id="txtEn">WORD</h1>
-                <span id="txtTr">(Türkçe)</span>
-            </div>
-            <div class="media-row">
-                <div class="media-box" id="boxImg">
-                     <div style="color:white; font-size:10px;">RESİM</div>
-                </div>
-                <div class="media-box" style="background:#1a1a1a; color:#555; font-size:12px; display:flex; align-items:center; justify-content:center;">
-                    <b>ŞARKI</b>
-                </div>
+            <div style="color: white; text-align: center; margin-bottom: 10px;">
+                <h1 id="txtEn" style="margin:0; font-size:32px;">WORD</h1>
+                <span id="txtTr" style="opacity:0.6;">(Türkçe)</span>
             </div>
             <div class="spotify-card">
                 <div class="player-view" id="videoArea"></div>
@@ -178,6 +165,7 @@
             list.appendChild(item);
         });
 
+        // QR BAĞLANTILARI BURADA KORUNUYOR
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const wordParam = urlParams.get('kelime');
@@ -197,11 +185,19 @@
             document.getElementById('txtEn').innerText = w.en.toUpperCase();
             document.getElementById('txtTr').innerText = `(${w.tr})`;
             if(w.vid) {
-                document.getElementById('videoArea').innerHTML = `<video id="vPlayer" autoplay loop playsinline ontimeupdate="updateProgress()"><source src="videolar/${w.vid}" type="video/mp4"></video>`;
-                document.getElementById('pBtn').innerText = "⏸";
+                document.getElementById('videoArea').innerHTML = `<video id="vPlayer" loop playsinline preload="auto" ontimeupdate="updateProgress()"><source src="videolar/${w.vid}" type="video/mp4"></video>`;
+                document.getElementById('pBtn').innerText = "▶"; 
             }
             document.getElementById('page-overlay').style.display = 'flex';
             tts(w.en);
+        }
+
+        function playHandler() {
+            const v = document.getElementById('vPlayer');
+            if(v) {
+                if (v.paused) { v.play(); document.getElementById('pBtn').innerText = "⏸"; }
+                else { v.pause(); document.getElementById('pBtn').innerText = "▶"; }
+            }
         }
 
         function closeView() {
@@ -215,15 +211,6 @@
         function updateProgress() {
             const v = document.getElementById('vPlayer');
             if(v && v.duration) document.getElementById('pFill').style.width = (v.currentTime / v.duration) * 100 + "%";
-        }
-
-        function playHandler() {
-            const v = document.getElementById('vPlayer');
-            if(v) {
-                if (v.paused) { v.play(); document.getElementById('pBtn').innerText = "⏸"; }
-                else { v.pause(); document.getElementById('pBtn').innerText = "▶"; }
-            }
-            tts(wordData[currentIndex].en);
         }
 
         function changeWord(dir) {
