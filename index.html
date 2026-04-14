@@ -5,21 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eskal Kelime Projesi - Burak Developer</title>
     <style>
-        :root { --bg-black: #000000; --card-dark: #121212; --inner-grey: #282828; --text-grey: #b3b3b3; }
+        :root { --bg-black: #000000; --card-dark: #121212; --inner-grey: #282828; --text-grey: #b3b3b3; --spotify-green: #1DB954; }
         body { font-family: 'Segoe UI', sans-serif; background: #000; margin: 0; padding: 20px; color: white; }
         .list-container { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
         .word-item { background: #1a1a1a; padding: 18px; border-radius: 12px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
         #page-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; }
         .content-container { width: 95%; max-width: 400px; position: relative; }
         .top-row { display: flex; gap: 15px; margin-bottom: 15px; }
-        .img-box { flex: 1; background: var(--inner-grey); border-radius: 20px; height: 120px; border: 1px solid #444; overflow: hidden; }
+        .img-box { flex: 1; background: var(--inner-grey); border-radius: 20px; height: 130px; border: 1px solid #444; overflow: hidden; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .song-box { flex: 1; background: var(--inner-grey); border-radius: 20px; height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 1px solid #444; padding: 5px; }
-        .song-box video { width: 100%; height: 60px; object-fit: cover; border-radius: 10px; }
+        
+        /* ŞARKI KUTUSU */
+        .song-box { flex: 1; background: var(--inner-grey); border-radius: 20px; height: 130px; border: 1px solid #444; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .song-box video { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+        .song-play-btn { position: absolute; background: var(--spotify-green); border: none; width: 40px; height: 40px; border-radius: 50%; color: white; cursor: pointer; font-size: 18px; z-index: 5; }
+
         .player-container { background: var(--card-dark); border-radius: 30px; padding: 20px; border: 1px solid #333; }
-        .video-box { width: 100%; height: 250px; background: #000; border-radius: 20px; overflow: hidden; border: 1px solid #444; }
+        
+        /* FİLM KUTUSU */
+        .video-box { width: 100%; height: 230px; background: #000; border-radius: 20px; overflow: hidden; border: 1px solid #444; position: relative; }
         .video-box video { width: 100%; height: 100%; object-fit: cover; }
-        .btn-p { width: 60px; height: 60px; background: #fff; border-radius: 50%; border: none; font-size: 24px; cursor: pointer; color: black; }
+        .film-play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 65px; height: 65px; background: #fff; border-radius: 50%; border: none; font-size: 28px; cursor: pointer; color: black; z-index: 5; }
+
+        .progress-area { margin: 20px 0; }
+        .bar-bg { width: 100%; height: 5px; background: #333; border-radius: 3px; position: relative; cursor: pointer; }
+        .bar-fill { width: 0%; height: 100%; background: #fff; border-radius: 3px; }
+        
+        /* ESKİ ÇEŞİTLİ BUTONLAR */
+        .control-btns { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+        .icon-btn { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
+        .dim { color: #555; font-size: 18px; }
+        
         .close-x { position: absolute; top: -50px; right: 0; font-size: 35px; color: #fff; cursor: pointer; }
     </style>
 </head>
@@ -30,76 +46,51 @@
     <div id="page-overlay">
         <div class="content-container">
             <div class="close-x" onclick="closeView()">✕</div>
-            <h2 id="txtEn" style="text-align:center; margin-bottom:15px;">WORD</h2>
+            <h2 id="txtEn" style="text-align:center; margin-bottom:15px; letter-spacing:2px;">WORD</h2>
+            
             <div class="top-row">
                 <div class="img-box"><img id="wordImg" src="" alt=""></div>
-                <div class="song-box" id="songArea"></div>
+                <div class="song-box">
+                    <span style="position:absolute; top:5px; font-size:10px; z-index:2; color:#eee;">ŞARKI</span>
+                    <button class="song-play-btn" id="sBtn" onclick="toggleSong()">▶</button>
+                    <video id="sPlayer" loop playsinline><source src="" type="video/mp4"></video>
+                </div>
             </div>
+
             <div class="player-container">
-                <div class="video-box" id="filmArea"></div>
-                <div style="text-align:center; margin-top:15px;">
-                    <button id="pBtn" class="btn-p" onclick="playAll()">▶</button>
+                <div class="video-box">
+                    <button class="film-play-btn" id="fBtn" onclick="toggleFilm()">▶</button>
+                    <video id="fPlayer" loop playsinline ontimeupdate="updateProgress()"><source src="" type="video/mp4"></video>
+                </div>
+
+                <div class="progress-area">
+                    <div class="bar-bg" onclick="seek(event)"><div class="bar-fill" id="pFill"></div></div>
+                </div>
+
+                <div class="control-btns">
+                    <button class="icon-btn dim">🔀</button>
+                    <button class="icon-btn" onclick="changeWord(-1)">⏮</button>
+                    <div style="width: 60px;"></div> <button class="icon-btn" onclick="changeWord(1)">⏭</button>
+                    <button class="icon-btn dim">🔁</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Film sahneleri (vid) ve Şarkılar (song) ayrıldı
+        let currentIndex = 0;
         const wordData = [
-            {en:"time", tr:"zaman", img:"https://i.ibb.co/KjtKG5t7/MG-20260414-WA0000.jpg", song:"VID-20260414-WA0010.mp4", vid:"VID-20260326-WA0029.mp4"},
-            {en:"year", tr:"yıl", img:"https://i.ibb.co/Lds0rNqZ/MG-20260414-WA0001.jpg", song:"VID-20260414-WA0011.mp4", vid:"VID-20260326-WA0030.mp4"},
-            {en:"people", tr:"insanlar", img:"https://i.ibb.co/9HnQS1Np/MG-20260414-WA0002.jpg", song:"VID-20260414-WA0012.mp4", vid:"VID-20260326-WA0031.mp4"},
-            {en:"way", tr:"yol", img:"https://i.ibb.co/KxVybz3W/MG-20260414-WA0003.jpg", song:"VID-20260414-WA0013.mp4", vid:"VID-20260326-WA0032.mp4"},
-            {en:"day", tr:"gün", img:"https://i.ibb.co/LXfmxrBf/MG-20260414-WA0004.jpg", song:"VID-20260414-WA0014.mp4", vid:"VID-20260326-WA0033.mp4"},
-            {en:"man", tr:"adam", img:"https://i.ibb.co/Wv9Lhxq8/MG-20260414-WA0005.jpg", song:"VID-20260414-WA0015.mp4", vid:"VID-20260326-WA0034.mp4"},
-            {en:"thing", tr:"şey", img:"https://i.ibb.co/ks3BjpND/MG-20260414-WA0006.jpg", song:"VID-20260414-WA0016.mp4", vid:"VID-20260326-WA0035.mp4"},
-            {en:"woman", tr:"kadın", img:"https://i.ibb.co/20QVq8y2/MG-20260414-WA0007.jpg", song:"VID-20260414-WA0017.mp4", vid:"VID-20260326-WA0036.mp4"},
-            {en:"life", tr:"hayat", img:"https://i.ibb.co/pB0Ky6wS/MG-20260414-WA0008.jpg", song:"VID-20260414-WA0018.mp4", vid:"VID-20260326-WA0037.mp4"},
-            {en:"child", tr:"çocuk", img:"https://i.ibb.co/QF7g44Md/MG-20260414-WA0009.jpg", song:"VID-20260414-WA0019.mp4", vid:"VID-20260313-WA0028.mp4"},
-            // ... (Kalan kelimeler için mevcut film videoları otomatik tanımlı)
-            {en:"world", tr:"dünya", vid:"VID-20260326-WA0039.mp4"}, {en:"school", tr:"okul", vid:"VID-20260326-WA0040.mp4"}
+            {en:"time", tr:"zaman", img:"https://i.ibb.co/KjtKG5t7/MG-20260414-WA0000.jpg", song:"VID-20260414-WA0010.mp4", film:"VID-20260326-WA0029.mp4"},
+            {en:"year", tr:"yıl", img:"https://i.ibb.co/Lds0rNqZ/MG-20260414-WA0001.jpg", song:"VID-20260414-WA0011.mp4", film:"VID-20260326-WA0030.mp4"},
+            {en:"people", tr:"insanlar", img:"https://i.ibb.co/9HnQS1Np/MG-20260414-WA0002.jpg", song:"VID-20260414-WA0012.mp4", film:"VID-20260326-WA0031.mp4"},
+            {en:"way", tr:"yol", img:"https://i.ibb.co/KxVybz3W/MG-20260414-WA0003.jpg", song:"VID-20260414-WA0013.mp4", film:"VID-20260326-WA0032.mp4"},
+            {en:"day", tr:"gün", img:"https://i.ibb.co/LXfmxrBf/MG-20260414-WA0004.jpg", song:"VID-20260414-WA0014.mp4", film:"VID-20260326-WA0033.mp4"},
+            {en:"man", tr:"adam", img:"https://i.ibb.co/Wv9Lhxq8/MG-20260414-WA0005.jpg", song:"VID-20260414-WA0015.mp4", film:"VID-20260326-WA0034.mp4"},
+            {en:"thing", tr:"şey", img:"https://i.ibb.co/ks3BjpND/MG-20260414-WA0006.jpg", song:"VID-20260414-WA0016.mp4", film:"VID-20260326-WA0035.mp4"},
+            {en:"woman", tr:"kadın", img:"https://i.ibb.co/20QVq8y2/MG-20260414-WA0007.jpg", song:"VID-20260414-WA0017.mp4", film:"VID-20260326-WA0036.mp4"},
+            {en:"life", tr:"hayat", img:"https://i.ibb.co/pB0Ky6wS/MG-20260414-WA0008.jpg", song:"VID-20260414-WA0018.mp4", film:"VID-20260326-WA0037.mp4"},
+            {en:"child", tr:"çocuk", img:"https://i.ibb.co/QF7g44Md/MG-20260414-WA0009.jpg", song:"VID-20260414-WA0019.mp4", film:"VID-20260313-WA0028.mp4"}
         ];
-
-        // 100 kelimenin tamamını içeren liste (özet)
-        const remainingWords = [
-            ["state","durum","WA0041"],["family","aile","WA0042"],["student","öğrenci","WA0043"],
-            ["group","grup","WA0044"],["country","ülke","WA0045"],["problem","sorun","WA0046"],
-            ["hand","el","WA0047"],["part","parça","WA0048"],["place","yer","WA0049"],
-            ["case","durum","WA0050"],["week","hafta","WA0051"],["company","şirket","WA0052"],
-            ["system","sistem","WA0053"],["word","kelime","WA0054"],["work","çalışmak","WA0055"],
-            ["use","kullanmak","WA0056"],["make","yapmak","WA0057"],["take","almak","WA0058"],
-            ["give","vermek","WA0059"],["come","gelmek","WA0060"],["look","bakmak","WA0061"],
-            ["want","istemek","WA0062"],["find","bulmak","WA0063"],["tell","anlatmak","WA0064"],
-            ["ask","sormak","WA0065"],["try","denemek","WA0066"],["need","ihtiyaç","WA0067"],
-            ["feel","hissetmek","WA0068"],["become","olmak","WA0069"],["leave","ayrılmak","WA0000"],
-            ["call","aramak","WA0138"],["keep","tutmak","WA0072"],["start","başlamak","WA0073"],
-            ["seem","görünmek","WA0074"],["help","yardım","WA0075"],["talk","konuşmak","WA0139"],
-            ["turn","dönmek","WA0077"],["begin","başlamak","WA0078"],["show","göstermek","WA0001"],
-            ["good","iyi","WA0080"],["new","yeni","WA0081"],["first","birinci","WA0082"],
-            ["last","son","WA0083"],["long","uzun","WA0084"],["great","harika","WA0085"],
-            ["little","küçük","WA0086"],["own","kendi","WA0087"],["other","diğer","WA0024"],
-            ["old","eski","WA0089"],["right","doğru","WA0090"],["big","büyük","WA0023"],
-            ["high","yüksek","WA0092"],["different","farklı","WA0034"],["small","küçük","WA0094"],
-            ["large","geniş","WA0024"],["next","sonraki","WA0095"],["early","erken","WA0096"],
-            ["young","genç","WA0097"],["important","önemli","WA0026"],["few","az","WA0099"],
-            ["public","halka açık","WA0022"],["bad","kötü","WA0027"],["same","aynı","WA0101"],
-            ["able","yapabilen","WA0102"],["very","çok","WA0103"],["often","sık sık","WA0021"],
-            ["really","gerçekten","WA0025"],["quickly","hızlıca","WA0105"],["slowly","yavaşça","WA0020"],
-            ["well","iyi","WA0025"],["always","her zaman","WA0022"],["sometimes","bazen","WA0033"],
-            ["usually","genellikle","WA0026"],["together","birlikte","WA0029"],["already","zaten","WA0028"],
-            ["almost","neredeyse","WA0109"],["especially","özellikle","WA0035"],["probably","muhtemelen","WA0019"],
-            ["finally","sonunda","WA0021"],["easily","kolayca","WA0013"],["recently","son zamanlarda","WA0018"],
-            ["immediately","hemen","WA0017"],["nearly","neredeyse","WA0012"],["currently","şu anda","WA0016"],
-            ["clearly","açıkça","WA0023"],["simply","basitçe","WA0015"],["exactly","tam olarak","WA0014"],
-            ["strongly","güçlüce","WA0011"]
-        ];
-
-        remainingWords.forEach(w => {
-            if(!wordData.find(x => x.en === w[0])) {
-                wordData.push({en:w[0], tr:w[1], vid:`VID-20260326-${w[2]}.mp4`});
-            }
-        });
 
         const list = document.getElementById('list');
         wordData.forEach((w, i) => {
@@ -111,51 +102,64 @@
         });
 
         function openView(index) {
+            currentIndex = index;
             const w = wordData[index];
             document.getElementById('txtEn').innerText = w.en.toUpperCase();
+            document.getElementById('wordImg').src = w.img;
             
-            // Resim
-            const imgEl = document.getElementById('wordImg');
-            if(w.img) { imgEl.src = w.img; imgEl.parentElement.style.display = 'block'; }
-            else { imgEl.parentElement.style.display = 'none'; }
+            const sP = document.getElementById('sPlayer');
+            const fP = document.getElementById('fPlayer');
             
-            // Sağ Kutu: Sadece Şarkı
-            if(w.song) {
-                document.getElementById('songArea').innerHTML = `
-                    <div style="font-size:9px; color:#888;">ŞARKI</div>
-                    <video id="sPlayer" loop playsinline style="height:60px;"><source src="videolar/${w.song}" type="video/mp4"></video>
-                    <div style="font-size:8px;">${w.song}</div>`;
-                document.getElementById('songArea').style.display = 'flex';
-            } else {
-                document.getElementById('songArea').style.display = 'none';
-            }
+            sP.src = `videolar/${w.song}`;
+            fP.src = `videolar/${w.film}`;
             
-            // Alt Büyük Kısım: Asıl Film Sahnesi
-            document.getElementById('filmArea').innerHTML = `
-                <video id="fPlayer" loop playsinline><source src="videolar/${w.vid}" type="video/mp4"></video>`;
+            document.getElementById('sBtn').innerText = "▶";
+            document.getElementById('fBtn').style.display = "block";
+            document.getElementById('fBtn').innerText = "▶";
             
-            document.getElementById('pBtn').innerText = "▶";
             document.getElementById('page-overlay').style.display = 'flex';
         }
 
-        function playAll() {
+        function toggleSong() {
             const s = document.getElementById('sPlayer');
+            const btn = document.getElementById('sBtn');
+            if(s.paused) { s.play(); btn.innerText = "⏸"; }
+            else { s.pause(); btn.innerText = "▶"; }
+        }
+
+        function toggleFilm() {
             const f = document.getElementById('fPlayer');
-            if(f.paused) { 
-                if(s) s.play(); 
-                f.play(); 
-                document.getElementById('pBtn').innerText = "⏸";
-            } else { 
-                if(s) s.pause(); 
-                f.pause(); 
-                document.getElementById('pBtn').innerText = "▶";
+            const btn = document.getElementById('fBtn');
+            if(f.paused) { f.play(); btn.style.display = "none"; }
+            else { f.pause(); btn.style.display = "block"; btn.innerText = "▶"; }
+        }
+
+        // Videoya tıklayınca durdur/başlat (Film için)
+        document.getElementById('fPlayer').onclick = function() { toggleFilm(); };
+
+        function updateProgress() {
+            const f = document.getElementById('fPlayer');
+            if(f.duration) {
+                let perc = (f.currentTime / f.duration) * 100;
+                document.getElementById('pFill').style.width = perc + "%";
             }
+        }
+
+        function seek(e) {
+            const f = document.getElementById('fPlayer');
+            const rect = e.target.getBoundingClientRect();
+            f.currentTime = ((e.clientX - rect.left) / rect.width) * f.duration;
+        }
+
+        function changeWord(dir) {
+            currentIndex = (currentIndex + dir + wordData.length) % wordData.length;
+            openView(currentIndex);
         }
 
         function closeView() { 
             document.getElementById('page-overlay').style.display = 'none'; 
-            document.getElementById('songArea').innerHTML = '';
-            document.getElementById('filmArea').innerHTML = '';
+            document.getElementById('sPlayer').pause();
+            document.getElementById('fPlayer').pause();
         }
     </script>
 </body>
