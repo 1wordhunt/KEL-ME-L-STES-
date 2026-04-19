@@ -22,11 +22,12 @@
         .main-player { width: 100%; height: 240px; background: #000; border-radius: 22px; overflow: hidden; position: relative; cursor: pointer; border: 1px solid #444; margin-bottom: 12px; }
         video { width: 100%; height: 100%; object-fit: cover; }
 
-        .play-btn { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.25); transition: opacity 0.4s; }
+        .play-btn { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.25); }
         .circle { width: 55px; height: 55px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 24px; }
         .song-circle { background: var(--green); color: white; width: 45px; height: 45px; }
 
         .controls-card { background: var(--card); border-radius: 30px; padding: 25px; border: 1px solid #333; }
+        .qr-link-btn { display: block; text-align: center; color: var(--green); margin-top: 15px; text-decoration: none; font-size: 14px; border: 1px solid var(--green); padding: 8px; border-radius: 10px; }
         .nav-btns { display: flex; justify-content: space-between; align-items: center; }
         .icon-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; }
         .close-btn { position: absolute; top: -60px; right: 0; font-size: 45px; color: #fff; cursor: pointer; }
@@ -61,46 +62,17 @@
                     <button class="icon-btn" style="font-size:45px" id="masterPlay" onclick="togglePlay('filmVid', 'filmBtn')">▶</button>
                     <button class="icon-btn" onclick="move(1)">⏭</button>
                 </div>
+                <a href="#" id="qrLink" target="_blank" class="qr-link-btn">Kelimeleri QR ile İncele</a>
             </div>
         </div>
     </div>
 
     <script>
-        // TAM SIRALAMA (1-100)
-        const words = [
-            "time", "year", "people", "way", "day", "man", "thing", "woman", "life", "child",
-            "world", "school", "state", "family", "student", "group", "country", "problem", "hand", "part",
-            "place", "case", "week", "company", "system", "word", "work", "use", "make", "take",
-            "give", "come", "look", "want", "find", "tell", "ask", "try", "need", "feel",
-            "become", "leave", "call", "keep", "start", "seem", "help", "talk", "turn", "begin",
-            "show", "good", "new", "first", "last", "long", "great", "little", "own", "other",
-            "old", "right", "big", "high", "different", "small", "large", "next", "early", "young",
-            "important", "few", "public", "bad", "same", "able", "very", "often", "really", "quickly",
-            "slowly", "well", "always", "sometimes", "usually", "together", "already", "almost", "especially", "probably",
-            "finally", "easily", "recently", "immediately", "nearly", "currently", "clearly", "simply", "exactly", "strongly"
-        ];
+        const words = ["time", "year", "people", "way", "day", "man", "thing", "woman", "life", "child", "world", "school", "state", "family", "student", "group", "country", "problem", "hand", "part", "place", "case", "week", "company", "system", "word", "work", "use", "make", "take", "give", "come", "look", "want", "find", "tell", "ask", "try", "need", "feel", "become", "leave", "call", "keep", "start", "seem", "help", "talk", "turn", "begin", "show", "good", "new", "first", "last", "long", "great", "little", "own", "other", "old", "right", "big", "high", "different", "small", "large", "next", "early", "young", "important", "few", "public", "bad", "same", "able", "very", "often", "really", "quickly", "slowly", "well", "always", "sometimes", "usually", "together", "already", "almost", "especially", "probably", "finally", "easily", "recently", "immediately", "nearly", "currently", "clearly", "simply", "exactly", "strongly"];
 
         const images = {
-            "world":"https://i.ibb.co/qY3p7Dxy/MG-20260415-WA0124.jpg", "school":"https://i.ibb.co/fzbXFKr6/MG-20260415-WA0125.jpg",
-            "state":"https://i.ibb.co/SDzF8Rkp/MG-20260415-WA0130.jpg", "family":"https://i.ibb.co/sJgqTk8K/MG-20260415-WA0127.jpg",
-            "student":"https://i.ibb.co/PsvJmC3m/MG-20260415-WA0128.jpg", "group":"https://i.ibb.co/GQVzJGg7/MG-20260415-WA0129.jpg",
-            "country":"https://i.ibb.co/h1TDP9jW/MG-20260415-WA0131.jpg", "problem":"https://i.ibb.co/KzysZqtj/MG-20260415-WA0132.jpg",
-            "hand":"https://i.ibb.co/MxDhFXV0/MG-20260415-WA0134.jpg", "part":"https://i.ibb.co/rG4PX3Pw/MG-20260415-WA0135.jpg",
-            "place":"https://i.ibb.co/zWQfmBkJ/MG-20260415-WA0136.jpg", "case":"https://i.ibb.co/R40HyyHX/MG-20260415-WA0137.jpg",
-            "week":"https://i.ibb.co/zHjsH7TB/MG-20260415-WA0138.jpg", "company":"https://i.ibb.co/8LwfX8K8/MG-20260415-WA0140.jpg",
-            "system":"https://i.ibb.co/DJTqtHk/MG-20260415-WA0141.jpg", "word":"https://i.ibb.co/2151RQVz/MG-20260415-WA0143.jpg",
-            "work":"https://i.ibb.co/h52kn48/MG-20260415-WA0146.jpg", "use":"https://i.ibb.co/8LFX93dR/MG-20260415-WA0147.jpg",
-            "make":"https://i.ibb.co/cKrxkxHV/MG-20260415-WA0148.jpg", "take":"https://i.ibb.co/JR6VBVMd/MG-20260415-WA0151.jpg",
-            "give":"https://i.ibb.co/dsvVT0Fd/MG-20260415-WA0152.jpg", "come":"https://i.ibb.co/svhHfsxd/MG-20260415-WA0154.jpg",
-            "look":"https://i.ibb.co/cXy2JzCD/MG-20260415-WA0157.jpg", "want":"https://i.ibb.co/h1cn8CY8/MG-20260415-WA0159.jpg",
-            "find":"https://i.ibb.co/Wp4SFWjx/MG-20260415-WA0161.jpg", "tell":"https://i.ibb.co/spSqVfvn/MG-20260415-WA0163.jpg",
-            "ask":"https://i.ibb.co/j9r7VZTW/MG-20260415-WA0165.jpg", "try":"https://i.ibb.co/W4wTNyQB/MG-20260415-WA0169.jpg",
-            "need":"https://i.ibb.co/dssZjnxH/MG-20260415-WA0171.jpg", "feel":"https://i.ibb.co/zht3nyYv/MG-20260415-WA0173.jpg",
-            "become":"https://i.ibb.co/PK3QGR7/MG-20260415-WA0175.jpg", "leave":"https://i.ibb.co/0VqFcSXR/MG-20260415-WA0177.jpg",
-            "call":"https://i.ibb.co/3YdZpwSM/MG-20260415-WA0180.jpg", "keep":"https://i.ibb.co/VY65Nnxm/MG-20260415-WA0182.jpg",
-            "start":"https://i.ibb.co/qF93p0X9/MG-20260415-WA0183.jpg", "help":"https://i.ibb.co/W48T3rKM/MG-20260415-WA0187.jpg",
-            "talk":"https://i.ibb.co/qMhddx8P/MG-20260415-WA0189.jpg", "turn":"https://i.ibb.co/gZkD4Ths/MG-20260415-WA0193.jpg",
-            "begin":"https://i.ibb.co/n8MM45GG/MG-20260415-WA0194.jpg", "show":"https://i.ibb.co/CKFKhCsv/MG-20260415-WA0197.jpg"
+            "good": "https://i.ibb.co/sJVjTS05/MG-20260418-WA0000.jpg", "new": "https://i.ibb.co/x8X6Mc6X/MG-20260418-WA0001.jpg", "first": "https://i.ibb.co/B2mwbVD7/MG-20260418-WA0002.jpg", "last": "https://i.ibb.co/0j56SxkL/MG-20260418-WA0003.jpg", "long": "https://i.ibb.co/J8LmtwT/MG-20260418-WA0004.jpg", "great": "https://i.ibb.co/6JJ60WCR/MG-20260418-WA0005.jpg", "little": "https://i.ibb.co/Kjxksm80/MG-20260418-WA0006.jpg", "own": "https://i.ibb.co/xtqzFz7x/MG-20260418-WA0007.jpg", "other": "https://i.ibb.co/5XY1GXh6/MG-20260418-WA0008.jpg", "old": "https://i.ibb.co/xtcvGpTd/MG-20260418-WA0009.jpg", "right": "https://i.ibb.co/8hP31tv/MG-20260418-WA0010.jpg", "big": "https://i.ibb.co/0jWZQjN0/MG-20260418-WA0011.jpg", "high": "https://i.ibb.co/m5C82Yzd/MG-20260418-WA0012.jpg", "different": "https://i.ibb.co/nMqQc33s/MG-20260418-WA0013.jpg", "small": "https://i.ibb.co/vxwZ21Br/MG-20260418-WA0014.jpg", "large": "https://i.ibb.co/XxYnz81p/MG-20260418-WA0015.jpg", "next": "https://i.ibb.co/MDFY3BQV/MG-20260418-WA0016.jpg", "early": "https://i.ibb.co/4RLvJ9DK/MG-20260418-WA0017.jpg", "young": "https://i.ibb.co/vxrr1KSK/MG-20260418-WA0022.jpg", "important": "https://i.ibb.co/Dfw564Nr/MG-20260419-WA0000.jpg", "few": "https://i.ibb.co/W44mPNy7/MG-20260419-WA0002.jpg", "public": "https://i.ibb.co/CpXBpPLM/MG-20260419-WA0004.jpg", "bad": "https://i.ibb.co/5g4Tn2cJ/MG-20260419-WA0006.jpg", "same": "https://i.ibb.co/VYxJ8fm8/MG-20260419-WA0008.jpg", "able": "https://i.ibb.co/qhM3WzR/MG-20260419-WA0010.jpg", "very": "https://i.ibb.co/SXRWpwQv/MG-20260419-WA0012.jpg", "often": "https://i.ibb.co/Y4xkYwLK/MG-20260419-WA0014.jpg", "really": "https://i.ibb.co/GfT7xW93/MG-20260419-WA0016.jpg", "quickly": "https://i.ibb.co/Kck4kb8Z/MG-20260419-WA0018.jpg", "slowly": "https://i.ibb.co/xKMDJZsb/MG-20260419-WA0020.jpg", "well": "https://i.ibb.co/WWy6nzwp/MG-20260419-WA0022.jpg", "always": "https://i.ibb.co/PZWGfV7L/MG-20260419-WA0024.jpg", "sometimes": "https://i.ibb.co/k2bhjHNy/MG-20260419-WA0027.jpg", "usually": "https://i.ibb.co/jZZT7rtG/MG-20260419-WA0029.jpg",
+            "world": "https://i.ibb.co/qY3p7Dxy/MG-20260415-WA0124.jpg", "school": "https://i.ibb.co/fzbXFKr6/MG-20260415-WA0125.jpg", "family": "https://i.ibb.co/sJgqTk8K/MG-20260415-WA0127.jpg", "student": "https://i.ibb.co/PsvJmC3m/MG-20260415-WA0128.jpg", "group": "https://i.ibb.co/GQVzJGg7/MG-20260415-WA0129.jpg", "state": "https://i.ibb.co/SDzF8Rkp/MG-20260415-WA0130.jpg", "country": "https://i.ibb.co/h1TDP9jW/MG-20260415-WA0131.jpg", "problem": "https://i.ibb.co/KzysZqtj/MG-20260415-WA0132.jpg", "hand": "https://i.ibb.co/MxDhFXV0/MG-20260415-WA0134.jpg", "part": "https://i.ibb.co/rG4PX3Pw/MG-20260415-WA0135.jpg", "place": "https://i.ibb.co/zWQfmBkJ/MG-20260415-WA0136.jpg", "case": "https://i.ibb.co/R40HyyHX/MG-20260415-WA0137.jpg", "week": "https://i.ibb.co/zHjsH7TB/MG-20260415-WA0138.jpg", "company": "https://i.ibb.co/8LwfX8K8/MG-20260415-WA0140.jpg", "system": "https://i.ibb.co/DJTqtHk/MG-20260415-WA0141.jpg", "word": "https://i.ibb.co/2151RQVz/MG-20260415-WA0143.jpg", "work": "https://i.ibb.co/h52kn48/MG-20260415-WA0146.jpg", "use": "https://i.ibb.co/8LFX93dR/MG-20260415-WA0147.jpg", "make": "https://i.ibb.co/cKrxkxHV/MG-20260415-WA0148.jpg", "take": "https://i.ibb.co/JR6VBVMd/MG-20260415-WA0151.jpg", "give": "https://i.ibb.co/dsvVT0Fd/MG-20260415-WA0152.jpg", "come": "https://i.ibb.co/svhHfsxd/MG-20260415-WA0154.jpg", "look": "https://i.ibb.co/cXy2JzCD/MG-20260415-WA0157.jpg", "want": "https://i.ibb.co/h1cn8CY8/MG-20260415-WA0159.jpg", "find": "https://i.ibb.co/Wp4SFWjx/MG-20260415-WA0161.jpg", "tell": "https://i.ibb.co/spSqVfvn/MG-20260415-WA0163.jpg", "ask": "https://i.ibb.co/j9r7VZTW/MG-20260415-WA0165.jpg", "try": "https://i.ibb.co/W4wTNyQB/MG-20260415-WA0169.jpg", "need": "https://i.ibb.co/dssZjnxH/MG-20260415-WA0171.jpg", "feel": "https://i.ibb.co/zht3nyYv/MG-20260415-WA0173.jpg", "become": "https://i.ibb.co/PK3QGR7/MG-20260415-WA0175.jpg", "leave": "https://i.ibb.co/0VqFcSXR/MG-20260415-WA0177.jpg", "call": "https://i.ibb.co/3YdZpwSM/MG-20260415-WA0180.jpg", "keep": "https://i.ibb.co/VY65Nnxm/MG-20260415-WA0182.jpg", "start": "https://i.ibb.co/qF93p0X9/MG-20260415-WA0183.jpg", "help": "https://i.ibb.co/W48T3rKM/MG-20260415-WA0187.jpg", "talk": "https://i.ibb.co/qMhddx8P/MG-20260415-WA0189.jpg", "turn": "https://i.ibb.co/gZkD4Ths/MG-20260415-WA0193.jpg", "begin": "https://i.ibb.co/n8MM45GG/MG-20260415-WA0194.jpg", "show": "https://i.ibb.co/CKFKhCsv/MG-20260415-WA0197.jpg"
         };
 
         let curIndex = 0;
@@ -118,11 +90,9 @@
             curIndex = i;
             const word = words[i];
             document.getElementById('wordTitle').innerText = word.toUpperCase();
-            
-            // Linki varsa gösterir, yoksa siyah yer tutucu resmi koyar (sıra bozulmaz)
             document.getElementById('targetImg').src = images[word] || "https://i.ibb.co/KjtKG5t7/MG-20260414-WA0000.jpg"; 
-
-            // Videolar 1. kelimeden 100. kelimeye kadar sırayla WA serileriyle eşleşir
+            document.getElementById('qrLink').href = `https://1wordhunt.github.io/KEL-ME-L-STES-/?kelime=${word}`;
+            
             document.getElementById('songVid').src = `videolar/VID-20260414-WA00${(10 + i).toString().padStart(2,'0')}.mp4`;
             document.getElementById('filmVid').src = `videolar/VID-20260326-WA00${(29 + i).toString().padStart(2,'0')}.mp4`;
             
@@ -135,26 +105,12 @@
         function togglePlay(vidId, btnId) {
             let v = document.getElementById(vidId);
             let b = document.getElementById(btnId);
-            if(v.paused) { 
-                v.play(); 
-                b.style.opacity = "0"; 
-                if(vidId === 'filmVid') document.getElementById('masterPlay').innerText = "⏸";
-            } else { 
-                v.pause(); 
-                b.style.opacity = "1"; 
-                if(vidId === 'filmVid') document.getElementById('masterPlay').innerText = "▶";
-            }
+            if(v.paused) { v.play(); b.style.opacity = "0"; if(vidId === 'filmVid') document.getElementById('masterPlay').innerText = "⏸"; }
+            else { v.pause(); b.style.opacity = "1"; if(vidId === 'filmVid') document.getElementById('masterPlay').innerText = "▶"; }
         }
 
-        function move(dir) {
-            curIndex = (curIndex + dir + words.length) % words.length;
-            openPopup(curIndex);
-        }
-
-        function closePopup() {
-            document.getElementById('overlay').style.display = 'none';
-            document.querySelectorAll('video').forEach(v => { v.pause(); v.currentTime = 0; });
-        }
+        function move(dir) { curIndex = (curIndex + dir + words.length) % words.length; openPopup(curIndex); }
+        function closePopup() { document.getElementById('overlay').style.display = 'none'; document.querySelectorAll('video').forEach(v => { v.pause(); v.currentTime = 0; }); }
     </script>
 </body>
 </html>
