@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eskal 100 Final - Burak Developer</title>
+    <title>Eskal 100 Kelime Projesi</title>
     <style>
         :root { --bg: #000; --card: #121212; --green: #1DB954; --grey: #282828; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 15px; }
@@ -27,7 +27,6 @@
         .song-circle { background: var(--green); color: white; width: 45px; height: 45px; }
 
         .controls-card { background: var(--card); border-radius: 30px; padding: 25px; border: 1px solid #333; }
-        .qr-link-btn { display: block; text-align: center; color: var(--green); margin-top: 15px; text-decoration: none; font-size: 14px; border: 1px solid var(--green); padding: 8px; border-radius: 10px; }
         .nav-btns { display: flex; justify-content: space-between; align-items: center; }
         .icon-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; }
         .close-btn { position: absolute; top: -60px; right: 0; font-size: 45px; color: #fff; cursor: pointer; }
@@ -35,7 +34,7 @@
 </head>
 <body>
 
-    <h1 style="text-align: center; letter-spacing: 3px; margin-bottom: 25px;">ESKAL 100</h1>
+    <h1 style="text-align: center; letter-spacing: 3px; margin-bottom: 25px;">ESKAL 100 KELİME PROJESİ</h1>
     <div class="list-container" id="list"></div>
 
     <div id="overlay">
@@ -62,7 +61,6 @@
                     <button class="icon-btn" style="font-size:45px" id="masterPlay" onclick="togglePlay('filmVid', 'filmBtn')">▶</button>
                     <button class="icon-btn" onclick="move(1)">⏭</button>
                 </div>
-                <a href="#" id="qrLink" target="_blank" class="qr-link-btn">Kelimeleri QR ile İncele</a>
             </div>
         </div>
     </div>
@@ -71,7 +69,11 @@
         const words = ["time", "year", "people", "way", "day", "man", "thing", "woman", "life", "child", "world", "school", "state", "family", "student", "group", "country", "problem", "hand", "part", "place", "case", "week", "company", "system", "word", "work", "use", "make", "take", "give", "come", "look", "want", "find", "tell", "ask", "try", "need", "feel", "become", "leave", "call", "keep", "start", "seem", "help", "talk", "turn", "begin", "show", "good", "new", "first", "last", "long", "great", "little", "own", "other", "old", "right", "big", "high", "different", "small", "large", "next", "early", "young", "important", "few", "public", "bad", "same", "able", "very", "often", "really", "quickly", "slowly", "well", "always", "sometimes", "usually", "together", "already", "almost", "especially", "probably", "finally", "easily", "recently", "immediately", "nearly", "currently", "clearly", "simply", "exactly", "strongly"];
 
         const images = {
-            // LİSTENİN BAŞINDAKİ SON GELENLER
+            "child": "https://i.ibb.co/0yq8j6w1/MG-20260414-WA0009.jpg",
+            "exactly": "https://i.ibb.co/9HHFmDRB/MG-20260419-WA0079.jpg",
+            "currently": "https://i.ibb.co/HDRz7vZN/MG-20260419-WA0073.jpg",
+            "clearly": "https://i.ibb.co/SwTBLYSP/MG-20260419-WA0075.jpg",
+            "strongly": "https://i.ibb.co/xS0nzDrT/MG-20260419-WA0081.jpg",
             "year": "https://i.ibb.co/5xnVn282/MG-20260414-WA0001.jpg",
             "people": "https://i.ibb.co/d4zw3Mt5/MG-20260414-WA0002.jpg",
             "way": "https://i.ibb.co/PGq2n0WK/MG-20260414-WA0003.jpg",
@@ -80,8 +82,6 @@
             "thing": "https://i.ibb.co/C5NDmRPf/MG-20260414-WA0006.jpg",
             "woman": "https://i.ibb.co/yFL5gnWf/MG-20260414-WA0007-2.jpg",
             "life": "https://i.ibb.co/yFz6NxkL/MG-20260414-WA0008.jpg",
-
-            // DİĞER TÜM KELİMELER
             "together": "https://i.ibb.co/jvf1KzWG/MG-20260419-WA0038.jpg",
             "already": "https://i.ibb.co/Y4SHhvd7/MG-20260419-WA0040.jpg",
             "almost": "https://i.ibb.co/JR6fTbzT/MG-20260419-WA0043.jpg",
@@ -184,7 +184,6 @@
             const word = words[i];
             document.getElementById('wordTitle').innerText = word.toUpperCase();
             document.getElementById('targetImg').src = images[word] || "https://i.ibb.co/KjtKG5t7/MG-20260414-WA0000.jpg"; 
-            document.getElementById('qrLink').href = `https://1wordhunt.github.io/KEL-ME-L-STES-/?kelime=${word}`;
             
             document.getElementById('songVid').src = `videolar/VID-20260414-WA00${(10 + i).toString().padStart(2,'0')}.mp4`;
             document.getElementById('filmVid').src = `videolar/VID-20260326-WA00${(29 + i).toString().padStart(2,'0')}.mp4`;
