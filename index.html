@@ -37,7 +37,7 @@
             <div class="close-btn" onclick="closePopup()">✕</div>
             <h2 id="wordTitle" style="text-align:center; margin-bottom:15px; letter-spacing:2px; text-transform:uppercase;">WORD</h2>
             <div class="top-row">
-                <div class="img-box"><img id="targetImg" src="" alt="Resim Yukleniyor..."></div>
+                <div class="img-box"><img id="targetImg" src="" alt=""></div>
                 <div class="video-box" onclick="togglePlay('songVid', 'songBtn')">
                     <div class="play-btn" id="songBtn"><div class="circle song-circle">▶</div></div>
                     <video id="songVid" loop playsinline><source src="" type="video/mp4"></video>
@@ -60,36 +60,9 @@
     <script>
         const words = ["time", "year", "people", "way", "day", "man", "thing", "woman", "life", "child", "world", "school", "state", "family", "student", "group", "country", "problem", "hand", "part", "place", "case", "week", "company", "system", "word", "work", "use", "make", "take", "give", "come", "look", "want", "find", "tell", "ask", "try", "need", "feel", "become", "leave", "call", "keep", "start", "seem", "help", "talk", "turn", "begin", "show", "good", "new", "first", "last", "long", "great", "little", "old", "other", "own", "big", "right", "high", "different", "large", "small", "early", "next", "young", "important", "few", "public", "bad", "same", "able", "very", "often", "really", "quickly", "slowly", "well", "always", "sometimes", "usually", "together", "already", "almost", "especially", "probably", "finally", "easily", "recently", "immediately", "nearly", "currently", "clearly", "simply", "exactly", "strongly"];
 
-        const songVideos = ["VID-20260414-WA0010.mp4", "VID-20260414-WA0011.mp4", "VID-20260414-WA0012.mp4", "VID-20260414-WA0013.mp4", "VID-20260414-WA0014.mp4", "VID-20260414-WA0015.mp4", "VID-20260414-WA0016.mp4", "VID-20260414-WA0017.mp4", "VID-20260414-WA0018.mp4", "VID-20260414-WA0019.mp4", "VID-20260416-WA0006.mp4", "VID-20260416-WA0007.mp4", "VID-20260416-WA0008.mp4", "VID-20260416-WA0010.mp4", "VID-20260416-WA0011.mp4", "VID-20260416-WA0012.mp4", "VID-20260416-WA0013.mp4", "VID-20260416-WA0014.mp4", "VID-20260416-WA0015.mp4", "VID-20260416-WA0016.mp4", "VID-20260416-WA0017.mp4", "VID-20260416-WA0018.mp4", "VID-20260416-WA0019.mp4", "VID-20260416-WA0020.mp4", "VID-20260416-WA0021.mp4", "VID-20260416-WA0022.mp4", "VID-20260416-WA0023.mp4", "VID-20260416-WA0024.mp4", "VID-20260416-WA0025.mp4", "VID-20260416-WA0027.mp4", "VID-20260416-WA0028.mp4", "VID-20260416-WA0029.mp4", "VID-20260416-WA0030.mp4", "VID-20260416-WA0031.mp4", "VID-20260416-WA0032.mp4", "VID-20260416-WA0033.mp4", "VID-20260416-WA0034.mp4", "VID-20260416-WA0035.mp4", "VID-20260416-WA0036.mp4", "VID-20260416-WA0037.mp4", "VID-20260416-WA0038.mp4", "VID-20260416-WA0040.mp4", "VID-20260416-WA0041.mp4", "VID-20260416-WA0042.mp4", "VID-20260416-WA0043.mp4", "VID-20260416-WA0044.mp4", "VID-20260416-WA0045.mp4", "VID-20260416-WA0046.mp4", "VID-20260416-WA0047.mp4", "VID-20260416-WA0048.mp4", "VID-20260418-WA0006.mp4", "VID-20260418-WA0008.mp4", "VID-20260418-WA0010.mp4", "VID-20260418-WA0012.mp4", "VID-20260418-WA0014.mp4", "VID-20260418-WA0016.mp4", "VID-20260418-WA0018.mp4", "VID-20260418-WA0020.mp4", "VID-20260418-WA0026.mp4", "VID-20260418-WA0024.mp4", "VID-20260418-WA0022.mp4", "VID-20260418-WA0030.mp4", "VID-20260418-WA0028.mp4", "VID-20260418-WA0034.mp4", "VID-20260418-WA0032.mp4", "VID-20260418-WA0036.mp4", "VID-20260418-WA0042.mp4", "VID-20260418-WA0040.mp4", "VID-20260418-WA0038.mp4", "VID-20260418-WA0044.mp4", "VID-20260419-WA0001.mp4", "VID-20260419-WA0003.mp4", "VID-20260419-WA0005.mp4", "VID-20260419-WA0007.mp4", "VID-20260419-WA0011.mp4", "VID-20260419-WA0009.mp4", "VID-20260419-WA0013.mp4", "VID-20260419-WA0015.mp4", "VID-20260419-WA0019.mp4", "VID-20260419-WA0017.mp4", "VID-20260419-WA0021.mp4", "VID-20260419-WA0023.mp4", "VID-20260419-WA0025.mp4", "VID-20260419-WA0027.mp4", "VID-20260419-WA0029.mp4", "VID-20260419-WA0039.mp4", "VID-20260419-WA0041.mp4", "VID-20260419-WA0044.mp4", "VID-20260419-WA0049.mp4", "VID-20260419-WA0051.mp4", "VID-20260419-WA0053.mp4", "VID-20260419-WA0057.mp4", "VID-20260419-WA0058.mp4", "VID-20260419-WA0062.mp4", "VID-20260419-WA0061.mp4", "VID-20260419-WA0073.mp4", "VID-20260419-WA0075.mp4", "VID-20260419-WA0079.mp4", "VID-20260419-WA0080.mp4", "VID-20260419-WA0082.mp4"];
+        const songVideos = ["VID-20260414-WA0010.mp4", "VID-20260414-WA0011.mp4", "VID-20260414-WA0012.mp4", "VID-20260414-WA0013.mp4", "VID-20260414-WA0014.mp4", "VID-20260414-WA0015.mp4", "VID-20260414-WA0016.mp4", "VID-20260414-WA0017.mp4", "VID-20260414-WA0018.mp4", "VID-20260414-WA0019.mp4", "VID-20260416-WA0006.mp4", "VID-20260416-WA0007.mp4", "VID-20260416-WA0008.mp4", "VID-20260416-WA0010.mp4", "VID-20260416-WA0011.mp4", "VID-20260416-WA0012.mp4", "VID-20260416-WA0013.mp4", "VID-20260416-WA0014.mp4", "VID-20260416-WA0015.mp4", "VID-20260416-WA0016.mp4", "VID-20260416-WA0017.mp4", "VID-20260416-WA0018.mp4", "VID-20260416-WA0019.mp4", "VID-20260416-WA0020.mp4", "VID-20260416-WA0021.mp4", "VID-20260416-WA0022.mp4", "VID-20260416-WA0023.mp4", "VID-20260416-WA0024.mp4", "VID-20260416-WA0025.mp4", "VID-20260416-WA0027.mp4", "VID-20260416-WA0028.mp4", "VID-20260416-WA0029.mp4", "VID-20260416-WA0030.mp4", "VID-20260416-WA0031.mp4", "VID-20260416-WA0032.mp4", "VID-20260416-WA0033.mp4", "VID-20260416-WA0034.mp4", "VID-20260416-WA0035.mp4", "VID-20260416-WA0036.mp4", "VID-20260416-WA0037.mp4", "VID-20260416-WA0038.mp4", "VID-20260416-WA0040.mp4", "VID-20260416-WA0041.mp4", "VID-20260416-WA0042.mp4", "VID-20260416-WA0043.mp4", "VID-20260416-WA0044.mp4", "VID-20260416-WA0045.mp4", "VID-20260416-WA0046.mp4", "VID-20260416-WA0047.mp4", "VID-20260416-WA0048.mp4", "VID-20260418-WA0006.mp4", "VID-20260418-WA0008.mp4", "VID-20260418-WA0010.mp4", "VID-20260418-WA0012.mp4", "VID-20260418-WA0014.mp4", "VID-20260418-WA0016.mp4", "VID-20260418-WA0018.mp4", "VID-20260418-WA0020.mp4", "VID-20260418-WA0026.mp4", "VID-20260418-WA0024.mp4", "VID-20260418-WA0022.mp4", "VID-20260418-WA0030.mp4", "VID-20260418-WA0028.mp4", "VID-20260418-WA0034.mp4", "VID-20260418-WA0032.mp4", "VID-20260418-WA0036.mp4", "VID-20260418-WA0042.mp4", "VID-20260418-WA0040.mp4", "VID-20260418-WA0038.mp4", "VID-20260418-WA0044.mp4", "VID-20260419-WA0001.mp4", "VID-20260419-WA0003.mp4", "VID-20260419-WA0005.mp4", "VID-20260419-WA0007.mp4", "VID-20260419-WA0011.mp4", "VID-20260419-WA0009.mp4", "VID-20260419-WA0013.mp4", "VID-20260419-WA0015.mp4", "VID-20260419-WA0019.mp4", "VID-20260419-WA0017.mp4", "VID-20260419-WA0021.mp4", "VID-20260419-WA0023.mp4", "VID-20260419-WA0025.mp4", "VID-20260419-WA0027.mp4", "VID-20260419-WA0029.mp4", "VID-20260419-WA0039.mp4", "VID-20260419-WA0041.mp4", "VID-20260419-WA0044.mp4", "VID-20260419-WA0049.mp4", "VID-20260419-WA0051.mp4", "VID-20260419-WA0053.mp4", "VID-20260419-WA0057.mp4", "VID-20260419-WA0058.mp4", "VID-20260419-WA0062.mp4", "VID-20260419-WA0063.mp4", "VID-20260419-WA0074.mp4", "VID-20260419-WA0076.mp4", "VID-20260419-WA0078.mp4", "VID-20260419-WA0080.mp4", "VID-20260419-WA0082.mp4"];
 
-        const images = {
-            "time": "https://i.ibb.co/KjtKG5t7/MG-20260414-WA0000.jpg",
-            "year": "https://i.ibb.co/5xnVn282/MG-20260414-WA0001.jpg",
-            "people": "https://i.ibb.co/d4zw3Mt5/MG-20260414-WA0002.jpg",
-            "way": "https://i.ibb.co/PGq2n0WK/MG-20260414-WA0003.jpg",
-            "day": "https://i.ibb.co/Ldr6W4ZC/MG-20260414-WA0004.jpg",
-            "man": "https://i.ibb.co/p6G0gNxw/MG-20260414-WA0005.jpg",
-            "thing": "https://i.ibb.co/C5NDmRPf/MG-20260414-WA0006.jpg",
-            "woman": "https://i.ibb.co/yFL5gnWf/MG-20260414-WA0007-2.jpg",
-            "life": "https://i.ibb.co/yFz6NxkL/MG-20260414-WA0008.jpg",
-            "child": "https://i.ibb.co/0yq8j6w1/MG-20260414-WA0009.jpg",
-            "system": "https://i.ibb.co/gZL5JmTw/MG-20260415-WA0129.jpg",
-            "work": "https://i.ibb.co/Ls402fr/MG-20260415-WA0132.jpg",
-            "together": "https://i.ibb.co/jvf1KzWG/MG-20260419-WA0038.jpg",
-            "already": "https://i.ibb.co/Y4SHhvd7/MG-20260419-WA0040.jpg",
-            "almost": "https://i.ibb.co/JR6fTbzT/MG-20260419-WA0043.jpg",
-            "especially": "https://i.ibb.co/N6XnCqVM/MG-20260419-WA0048.jpg",
-            "probably": "https://i.ibb.co/XrTf5MH6/MG-20260419-WA0050.jpg",
-            "finally": "https://i.ibb.co/mCrcWws9/MG-20260419-WA0052.jpg",
-            "easily": "https://i.ibb.co/JRk8FnZ1/MG-20260419-WA0054.jpg",
-            "recently": "https://i.ibb.co/GQsd0PFB/MG-20260419-WA0056.jpg",
-            "immediately": "https://i.ibb.co/6pMwtNd/MG-20260419-WA0059.jpg",
-            "nearly": "https://i.ibb.co/qYqgv6dG/MG-20260419-WA0061.jpg",
-            "currently": "https://i.ibb.co/HDRz7vZN/MG-20260419-WA0073.jpg",
-            "clearly": "https://i.ibb.co/SwTBLYSP/MG-20260419-WA0075.jpg",
-            "exactly": "https://i.ibb.co/9HHFmDRB/MG-20260419-WA0079.jpg",
-            "strongly": "https://i.ibb.co/xS0nzDrT/MG-20260419-WA0081.jpg"
-        };
+        const images = {"child": "https://i.ibb.co/0yq8j6w1/MG-20260414-WA0009.jpg","exactly": "https://i.ibb.co/9HHFmDRB/MG-20260419-WA0079.jpg","currently": "https://i.ibb.co/HDRz7vZN/MG-20260419-WA0073.jpg","clearly": "https://i.ibb.co/SwTBLYSP/MG-20260419-WA0075.jpg","strongly": "https://i.ibb.co/xS0nzDrT/MG-20260419-WA0081.jpg","year": "https://i.ibb.co/5xnVn282/MG-20260414-WA0001.jpg","people": "https://i.ibb.co/d4zw3Mt5/MG-20260414-WA0002.jpg","way": "https://i.ibb.co/PGq2n0WK/MG-20260414-WA0003.jpg","day": "https://i.ibb.co/Ldr6W4ZC/MG-20260414-WA0004.jpg","man": "https://i.ibb.co/p6G0gNxw/MG-20260414-WA0005.jpg","thing": "https://i.ibb.co/C5NDmRPf/MG-20260414-WA0006.jpg","woman": "https://i.ibb.co/yFL5gnWf/MG-20260414-WA0007-2.jpg","life": "https://i.ibb.co/yFz6NxkL/MG-20260414-WA0008.jpg","together": "https://i.ibb.co/jvf1KzWG/MG-20260419-WA0038.jpg","already": "https://i.ibb.co/Y4SHhvd7/MG-20260419-WA0040.jpg","almost": "https://i.ibb.co/JR6fTbzT/MG-20260419-WA0043.jpg","especially": "https://i.ibb.co/N6XnCqVM/MG-20260419-WA0048.jpg","probably": "https://i.ibb.co/XrTf5MH6/MG-20260419-WA0050.jpg","finally": "https://i.ibb.co/mCrcWws9/MG-20260419-WA0052.jpg","easily": "https://i.ibb.co/JRk8FnZ1/MG-20260419-WA0054.jpg","recently": "https://i.ibb.co/GQsd0PFB/MG-20260419-WA0056.jpg","immediately": "https://i.ibb.co/6pMwtNd/MG-20260419-WA0059.jpg","nearly": "https://i.ibb.co/qYqgv6dG/MG-20260419-WA0061.jpg","system": "https://i.ibb.co/gZL5JmTw/MG-20260415-WA0129.jpg","work": "https://i.ibb.co/Ls402fr/MG-20260415-WA0132.jpg"};
 
         let curIndex = 0;
         const listDiv = document.getElementById('list');
@@ -105,16 +78,9 @@
             curIndex = i;
             const word = words[i];
             document.getElementById('wordTitle').innerText = word.toUpperCase();
-            
-            // RESİM KONTROL: Eğer o kelimenin resmi yoksa varsayılan resmi (time'ın resmini) koyar.
             document.getElementById('targetImg').src = images[word] || "https://i.ibb.co/KjtKG5t7/MG-20260414-WA0000.jpg"; 
-            
             document.getElementById('songVid').src = `videolar/${songVideos[i]}`;
-            
-            // FİLM KONTROL: GitHub klasöründeki VID-20260326-WA0022'den başlayan seri.
-            let filmNum = (22 + i);
-            document.getElementById('filmVid').src = `videolar/VID-20260326-WA0${filmNum.toString().padStart(3, '0').slice(-3)}.mp4`;
-            
+            document.getElementById('filmVid').src = `videolar/VID-20260326-WA00${(29 + i).toString().padStart(2,'0')}.mp4`;
             document.getElementById('songBtn').style.opacity = "1";
             document.getElementById('filmBtn').style.opacity = "1";
             document.getElementById('masterPlay').innerText = "▶";
@@ -124,7 +90,7 @@
         function togglePlay(vidId, btnId) {
             let v = document.getElementById(vidId);
             let b = document.getElementById(btnId);
-            if(v.paused) { v.play().catch(e => console.log("Hata:", e)); b.style.opacity = "0"; if(vidId === 'filmVid') document.getElementById('masterPlay').innerText = "⏸"; } 
+            if(v.paused) { v.play(); b.style.opacity = "0"; if(vidId === 'filmVid') document.getElementById('masterPlay').innerText = "⏸"; } 
             else { v.pause(); b.style.opacity = "1"; if(vidId === 'filmVid') document.getElementById('masterPlay').innerText = "▶"; }
         }
 
