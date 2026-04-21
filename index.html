@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eskal 100 - Burak Developer Edition</title>
     <style>
-        :root { --bg: #000; --card: #121212; --green: #1DB954; --grey: #282828; }
+        :root { --bg: #000; --card: #121212; --green: #1DB954; --grey: #282828; --border: #333; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 15px; }
         
         /* Liste Tasarımı */
         .list-container { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
         .word-item { 
             background: #1a1a1a; padding: 16px; border-radius: 12px; cursor: pointer; 
-            display: flex; justify-content: space-between; align-items: center; border: 1px solid #333;
+            display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border);
             transition: 0.3s;
         }
         .word-item:hover { background: var(--grey); transform: scale(1.02); }
@@ -21,48 +21,52 @@
         #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; justify-content: center; align-items: center; }
         .content { width: 92%; max-width: 400px; position: relative; }
         
-        /* Üst Medya Satırı (Resim ve Şarkı Videosu) */
+        /* ÜST KATMAN: Resim ve Şarkı (Yan Yana) */
         .top-row { display: flex; gap: 12px; margin-bottom: 12px; }
-        .img-box, .video-box { flex: 1; height: 140px; background: var(--grey); border-radius: 18px; overflow: hidden; border: 1px solid #444; position: relative; }
+        .img-box, .song-box { flex: 1; height: 140px; background: var(--grey); border-radius: 18px; overflow: hidden; border: 1px solid #444; position: relative; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* Ana Film Oynatıcı */
-        .main-player { width: 100%; height: 240px; background: #000; border-radius: 22px; overflow: hidden; position: relative; cursor: pointer; border: 1px solid #444; margin-bottom: 12px; }
+        /* ALT KATMAN: Film (Büyük Alan) */
+        .film-container { background: var(--card); border-radius: 30px; padding: 15px; border: 1px solid var(--border); }
+        .main-player { width: 100%; height: 220px; background: #000; border-radius: 20px; overflow: hidden; position: relative; cursor: pointer; border: 1px solid #444; margin-bottom: 15px; }
         video { width: 100%; height: 100%; object-fit: cover; }
         
-        /* Butonlar ve Kontroller */
-        .play-btn { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.25); z-index: 2; transition: 0.3s; }
-        .circle { width: 55px; height: 55px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 24px; }
-        .song-circle { background: var(--green); color: white; width: 45px; height: 45px; }
-        .controls-card { background: var(--card); border-radius: 30px; padding: 25px; border: 1px solid #333; }
-        .nav-btns { display: flex; justify-content: space-between; align-items: center; }
-        .icon-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; }
-        .close-btn { position: absolute; top: -60px; right: 0; font-size: 45px; color: #fff; cursor: pointer; }
+        /* Oynatma Butonları */
+        .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); z-index: 2; pointer-events: none; }
+        .circle { width: 50px; height: 50px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .song-circle { background: var(--green); color: white; width: 40px; height: 40px; }
+
+        /* Navigasyon */
+        .nav-btns { display: flex; justify-content: space-between; align-items: center; padding: 0 10px; }
+        .icon-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; opacity: 0.8; }
+        .icon-btn:hover { opacity: 1; }
+        .close-btn { position: absolute; top: -55px; right: 0; font-size: 40px; color: #fff; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <h1 style="text-align: center; letter-spacing: 3px; margin-bottom: 25px;">ESKAL 100</h1>
-    
     <div class="list-container" id="list"></div>
 
     <div id="overlay">
         <div class="content">
             <div class="close-btn" onclick="closePopup()">✕</div>
-            <h2 id="wordTitle" style="text-align:center; margin-bottom:15px; letter-spacing:2px; text-transform:uppercase;">WORD</h2>
+            <h2 id="wordTitle" style="text-align:center; margin-bottom:15px; letter-spacing:2px; text-transform:uppercase;">KELİME</h2>
             
             <div class="top-row">
-                <div class="img-box"><img id="targetImg" src="" alt="Resim"></div>
-                <div class="video-box" onclick="togglePlay('songVid', 'songBtn')">
-                    <div class="play-btn" id="songBtn"><div class="circle song-circle">▶</div></div>
-                    <video id="songVid" loop playsinline><source id="songSrc" src="" type="video/mp4"></video>
+                <div class="img-box">
+                    <img id="targetImg" src="" alt="Resim">
+                </div>
+                <div class="song-box" onclick="togglePlay('songVid', 'songBtn')">
+                    <div class="play-overlay" id="songBtn"><div class="circle song-circle">▶</div></div>
+                    <video id="songVid" loop playsinline><source src="" type="video/mp4"></video>
                 </div>
             </div>
 
-            <div class="controls-card">
+            <div class="film-container">
                 <div class="main-player" onclick="togglePlay('filmVid', 'filmBtn')">
-                    <div class="play-btn" id="filmBtn"><div class="circle">▶</div></div>
-                    <video id="filmVid" loop playsinline><source id="filmSrc" src="" type="video/mp4"></video>
+                    <div class="play-overlay" id="filmBtn"><div class="circle">▶</div></div>
+                    <video id="filmVid" loop playsinline><source src="" type="video/mp4"></video>
                 </div>
                 
                 <div class="nav-btns">
@@ -75,16 +79,24 @@
     </div>
 
     <script>
-        // Senin o meşhur 100 kelimen ve medyaların
         const words = ["time", "year", "people", "way", "day", "man", "thing", "woman", "life", "child", "world", "school", "state", "family", "student", "group", "country", "problem", "hand", "part", "place", "case", "week", "company", "system", "word", "work", "use", "make", "take", "give", "come", "look", "want", "find", "tell", "ask", "try", "need", "feel", "become", "leave", "call", "keep", "start", "seem", "help", "talk", "turn", "begin", "show", "good", "new", "first", "last", "long", "great", "little", "old", "other", "own", "big", "right", "high", "different", "large", "small", "early", "next", "young", "important", "few", "public", "bad", "same", "able", "very", "often", "really", "quickly", "slowly", "well", "always", "sometimes", "usually", "together", "already", "almost", "especially", "probably", "finally", "easily", "recently", "immediately", "nearly", "currently", "clearly", "simply", "exactly", "strongly"];
 
-        // Ekran görüntülerinden aldığımız o WA video listesi
-        const songVids = ["VID-20260414-WA0010.mp4", "VID-20260414-WA0011.mp4", "VID-20260414-WA0012.mp4", /* ... devamı senin kodunda var */];
+        // Bugün attığın videolardan aldığım liste
+        const songVids = ["VID-20260421-WA0071.mp4", "VID-20260421-WA0072.mp4", "VID-20260421-WA0059.mp4", "VID-20260421-WA0060.mp4", "VID-20260421-WA0061.mp4", "VID-20260421-WA0062.mp4", "VID-20260421-WA0063.mp4", "VID-20260421-WA0064.mp4", "VID-20260421-WA0054.mp4", "VID-20260421-WA0055.mp4", "VID-20260421-WA0056.mp4", "VID-20260421-WA0057.mp4", "VID-20260421-WA0058.mp4", "VID-20260421-WA0050.mp4", "VID-20260421-WA0051.mp4", "VID-20260421-WA0052.mp4", "VID-20260421-WA0053.mp4", "VID-20260421-WA0048.mp4", "VID-20260421-WA0049.mp4", "VID-20260421-WA0046.mp4"];
+
+        const wordData = {
+            "time": "https://i.ibb.co/KjtKG5t7/MG-20260414-WA0000.jpg",
+            "year": "https://i.ibb.co/5xnVn282/MG-20260414-WA0001.jpg",
+            "people": "https://i.ibb.co/d4zw3Mt5/MG-20260414-WA0002.jpg",
+            "way": "https://i.ibb.co/PGq2n0WK/MG-20260414-WA0003.jpg",
+            "day": "https://i.ibb.co/Ldr6W4ZC/MG-20260414-WA0004.jpg"
+            // Diğer 100 resim buraya gelecek...
+        };
 
         let curIndex = 0;
         const listDiv = document.getElementById('list');
 
-        // Sayfa açıldığında 100 kelimeyi mermi gibi diz
+        // Listeyi oluştur
         words.forEach((w, i) => {
             let row = document.createElement('div');
             row.className = 'word-item';
@@ -97,16 +109,17 @@
             curIndex = i;
             const word = words[i];
             
-            // Başlık ve Resim Güncelle
+            // Pencere İçeriğini Güncelle
             document.getElementById('wordTitle').innerText = word.toUpperCase();
-            document.getElementById('targetImg').src = `https://i.ibb.co/` + (wordData[word] || "KjtKG5t7/MG-20260414-WA0000.jpg").split('/').pop();
-
-            // Medyaları Yükle
-            document.getElementById('songVid').src = `videolar/${songVids[i]}`;
-            let filmNum = 22 + i; // Film videoları sıralaması
+            document.getElementById('targetImg').src = wordData[word] || "https://i.ibb.co/KjtKG5t7/MG-20260414-WA0000.jpg";
+            
+            // Videoları Yükle
+            document.getElementById('songVid').src = `videolar/${songVids[i] || 'VID-20260421-WA0071.mp4'}`;
+            // Filmler sıralı gidiyor demiştin (VID-20260326-WA022 vb.)
+            let filmNum = 22 + i;
             document.getElementById('filmVid').src = `videolar/VID-20260326-WA0${filmNum.toString().padStart(3, '0').slice(-3)}.mp4`;
 
-            // Resetle
+            // Arayüzü Resetle
             document.getElementById('songBtn').style.opacity = "1";
             document.getElementById('filmBtn').style.opacity = "1";
             document.getElementById('masterPlay').innerText = "▶";
@@ -119,15 +132,19 @@
             if(v.paused) { 
                 v.play(); 
                 b.style.opacity = "0"; 
-                if(vidId === 'filmVid') document.getElementById('masterPlay').innerText = "⏸"; 
+                if(vidId === 'filmVid') document.getElementById('masterPlay').innerText = "⏸";
             } else { 
                 v.pause(); 
                 b.style.opacity = "1"; 
-                if(vidId === 'filmVid') document.getElementById('masterPlay').innerText = "▶"; 
+                if(vidId === 'filmVid') document.getElementById('masterPlay').innerText = "▶";
             }
         }
 
-        function move(dir) { curIndex = (curIndex + dir + words.length) % words.length; openPopup(curIndex); }
+        function move(dir) { 
+            curIndex = (curIndex + dir + words.length) % words.length; 
+            openPopup(curIndex); 
+        }
+
         function closePopup() { 
             document.getElementById('overlay').style.display = 'none'; 
             document.querySelectorAll('video').forEach(v => { v.pause(); v.currentTime = 0; }); 
