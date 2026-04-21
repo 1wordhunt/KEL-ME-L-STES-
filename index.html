@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eskal 100 - Burak Developer Edition</title>
+    <title>Eskal 100 - Burak Developer Fix</title>
     <style>
         :root { --bg: #000; --card: #121212; --green: #1DB954; --grey: #282828; --border: #333; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 15px; }
@@ -13,49 +13,44 @@
         .word-item { 
             background: #1a1a1a; padding: 16px; border-radius: 12px; cursor: pointer; 
             display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border);
-            transition: 0.3s;
         }
-        .word-item:hover { background: var(--grey); transform: scale(1.02); }
 
-        /* Pop-up (Overlay) Tasarımı */
+        /* Pop-up (Overlay) */
         #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; justify-content: center; align-items: center; }
         .content { width: 92%; max-width: 400px; position: relative; }
         
-        /* ÜST KATMAN: Resim ve Şarkı (Yan Yana) */
+        /* Üst Sıra: Resim ve Dün Geceki Şarkılar */
         .top-row { display: flex; gap: 12px; margin-bottom: 12px; }
-        .img-box, .song-box { flex: 1; height: 140px; background: var(--grey); border-radius: 18px; overflow: hidden; border: 1px solid #444; position: relative; }
+        .img-box, .song-box { flex: 1; height: 145px; background: var(--grey); border-radius: 18px; overflow: hidden; border: 1px solid #444; position: relative; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* ALT KATMAN: Film (Büyük Alan) */
+        /* Alt Sıra: Bugün Attığın 100 Film */
         .film-container { background: var(--card); border-radius: 30px; padding: 15px; border: 1px solid var(--border); }
         .main-player { width: 100%; height: 220px; background: #000; border-radius: 20px; overflow: hidden; position: relative; cursor: pointer; border: 1px solid #444; margin-bottom: 15px; }
         video { width: 100%; height: 100%; object-fit: cover; }
         
-        /* Oynatma Butonları */
-        .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); z-index: 2; pointer-events: none; }
-        .circle { width: 50px; height: 50px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .song-circle { background: var(--green); color: white; width: 40px; height: 40px; }
+        .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.1); z-index: 2; pointer-events: none; }
+        .circle { width: 45px; height: 45px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 18px; }
+        .song-circle { background: var(--green); color: white; width: 35px; height: 35px; }
 
-        /* Navigasyon */
-        .nav-btns { display: flex; justify-content: space-between; align-items: center; padding: 0 10px; }
-        .icon-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; opacity: 0.8; }
-        .icon-btn:hover { opacity: 1; }
-        .close-btn { position: absolute; top: -55px; right: 0; font-size: 40px; color: #fff; cursor: pointer; }
+        .nav-btns { display: flex; justify-content: space-between; align-items: center; }
+        .icon-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; }
+        .close-btn { position: absolute; top: -50px; right: 0; font-size: 35px; color: #fff; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <h1 style="text-align: center; letter-spacing: 3px; margin-bottom: 25px;">ESKAL 100</h1>
+    <h1 style="text-align: center; letter-spacing: 2px;">ESKAL 100</h1>
     <div class="list-container" id="list"></div>
 
     <div id="overlay">
         <div class="content">
             <div class="close-btn" onclick="closePopup()">✕</div>
-            <h2 id="wordTitle" style="text-align:center; margin-bottom:15px; letter-spacing:2px; text-transform:uppercase;">KELİME</h2>
+            <h2 id="wordTitle" style="text-align:center; margin-bottom:15px; text-transform: uppercase;">KELİME</h2>
             
             <div class="top-row">
                 <div class="img-box">
-                    <img id="targetImg" src="" alt="Resim">
+                    <img id="targetImg" src="" alt="Görsel">
                 </div>
                 <div class="song-box" onclick="togglePlay('songVid', 'songBtn')">
                     <div class="play-overlay" id="songBtn"><div class="circle song-circle">▶</div></div>
@@ -71,7 +66,7 @@
                 
                 <div class="nav-btns">
                     <button class="icon-btn" onclick="move(-1)">⏮</button>
-                    <button class="icon-btn" style="font-size:45px" id="masterPlay" onclick="togglePlay('filmVid', 'filmBtn')">▶</button>
+                    <button class="icon-btn" style="font-size:40px" id="masterPlay" onclick="togglePlay('filmVid', 'filmBtn')">▶</button>
                     <button class="icon-btn" onclick="move(1)">⏭</button>
                 </div>
             </div>
@@ -79,47 +74,43 @@
     </div>
 
     <script>
-        const words = ["time", "year", "people", "way", "day", "man", "thing", "woman", "life", "child", "world", "school", "state", "family", "student", "group", "country", "problem", "hand", "part", "place", "case", "week", "company", "system", "word", "work", "use", "make", "take", "give", "come", "look", "want", "find", "tell", "ask", "try", "need", "feel", "become", "leave", "call", "keep", "start", "seem", "help", "talk", "turn", "begin", "show", "good", "new", "first", "last", "long", "great", "little", "old", "other", "own", "big", "right", "high", "different", "large", "small", "early", "next", "young", "important", "few", "public", "bad", "same", "able", "very", "often", "really", "quickly", "slowly", "well", "always", "sometimes", "usually", "together", "already", "almost", "especially", "probably", "finally", "easily", "recently", "immediately", "nearly", "currently", "clearly", "simply", "exactly", "strongly"];
+        const words = ["time", "year", "people", "way", "day", "man", "thing", "woman", "life", "child", "world", "school", "state", "family", "student", "group", "country", "problem", "hand", "part"];
 
-        // Bugün attığın videolardan aldığım liste
-        const songVids = ["VID-20260421-WA0071.mp4", "VID-20260421-WA0072.mp4", "VID-20260421-WA0059.mp4", "VID-20260421-WA0060.mp4", "VID-20260421-WA0061.mp4", "VID-20260421-WA0062.mp4", "VID-20260421-WA0063.mp4", "VID-20260421-WA0064.mp4", "VID-20260421-WA0054.mp4", "VID-20260421-WA0055.mp4", "VID-20260421-WA0056.mp4", "VID-20260421-WA0057.mp4", "VID-20260421-WA0058.mp4", "VID-20260421-WA0050.mp4", "VID-20260421-WA0051.mp4", "VID-20260421-WA0052.mp4", "VID-20260421-WA0053.mp4", "VID-20260421-WA0048.mp4", "VID-20260421-WA0049.mp4", "VID-20260421-WA0046.mp4"];
+        // Dün geceki şarkıların (Sıralamayı buraya ekleyebilirsin)
+        const sarkiListesi = ["VID-20260421-WA0071.mp4", "VID-20260421-WA0072.mp4", "VID-20260421-WA0059.mp4", "VID-20260421-WA0060.mp4"];
 
-        const wordData = {
-            "time": "https://i.ibb.co/KjtKG5t7/MG-20260414-WA0000.jpg",
-            "year": "https://i.ibb.co/5xnVn282/MG-20260414-WA0001.jpg",
-            "people": "https://i.ibb.co/d4zw3Mt5/MG-20260414-WA0002.jpg",
-            "way": "https://i.ibb.co/PGq2n0WK/MG-20260414-WA0003.jpg",
-            "day": "https://i.ibb.co/Ldr6W4ZC/MG-20260414-WA0004.jpg"
-            // Diğer 100 resim buraya gelecek...
-        };
+        // Bugün attığın 100 film (WA0001, WA0002... diye gidiyor)
+        function getFilmPath(i) {
+            let num = i + 1;
+            return `videolar/VID-20260421-WA${num.toString().padStart(4, '0')}.mp4`;
+        }
+
+        // Resimler (Sırasıyla)
+        function getImgPath(i) {
+            return `https://i.ibb.co/KjtKG5t7/MG-20260414-WA${i.toString().padStart(4, '0')}.jpg`;
+        }
 
         let curIndex = 0;
         const listDiv = document.getElementById('list');
 
-        // Listeyi oluştur
         words.forEach((w, i) => {
             let row = document.createElement('div');
             row.className = 'word-item';
             row.onclick = () => openPopup(i);
-            row.innerHTML = `<span><b>${i+1}.</b> ${w.toUpperCase()}</span><span style="color:var(--green)">▶</span>`;
+            row.innerHTML = `<span><b>${i+1}.</b> ${w.toUpperCase()}</span><span style="color:var(--green)">GÖRÜNTÜLE</span>`;
             listDiv.appendChild(row);
         });
 
         function openPopup(i) {
             curIndex = i;
-            const word = words[i];
+            document.getElementById('wordTitle').innerText = words[i].toUpperCase();
+            document.getElementById('targetImg').src = getImgPath(i);
             
-            // Pencere İçeriğini Güncelle
-            document.getElementById('wordTitle').innerText = word.toUpperCase();
-            document.getElementById('targetImg').src = wordData[word] || "https://i.ibb.co/KjtKG5t7/MG-20260414-WA0000.jpg";
-            
-            // Videoları Yükle
-            document.getElementById('songVid').src = `videolar/${songVids[i] || 'VID-20260421-WA0071.mp4'}`;
-            // Filmler sıralı gidiyor demiştin (VID-20260326-WA022 vb.)
-            let filmNum = 22 + i;
-            document.getElementById('filmVid').src = `videolar/VID-20260326-WA0${filmNum.toString().padStart(3, '0').slice(-3)}.mp4`;
+            // Üstteki sağ kutu: Dün geceki şarkılar
+            document.getElementById('songVid').src = `videolar/${sarkiListesi[i % sarkiListesi.length]}`;
+            // Alttaki büyük kutu: Bugün attığın filmler
+            document.getElementById('filmVid').src = getFilmPath(i);
 
-            // Arayüzü Resetle
             document.getElementById('songBtn').style.opacity = "1";
             document.getElementById('filmBtn').style.opacity = "1";
             document.getElementById('masterPlay').innerText = "▶";
@@ -147,7 +138,7 @@
 
         function closePopup() { 
             document.getElementById('overlay').style.display = 'none'; 
-            document.querySelectorAll('video').forEach(v => { v.pause(); v.currentTime = 0; }); 
+            document.querySelectorAll('video').forEach(v => { v.pause(); }); 
         }
     </script>
 </body>
