@@ -3,105 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Awasome Tübitak Word List</title>
+    <title>Burak Developer | WordHunt Spotify Edition</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0f0f; color: white; text-align: center; margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: auto; background: #1a1a1a; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); border: 1px solid #333; }
-        .header { margin-bottom: 20px; border-bottom: 2px solid #00d4ff; padding-bottom: 10px; }
-        .word-title { font-size: 4rem; color: #00d4ff; margin: 10px 0; text-transform: uppercase; letter-spacing: 2px; }
-        .media-box { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-        img { width: 100%; max-width: 500px; border-radius: 12px; border: 4px solid #444; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        video { width: 100%; max-width: 600px; border-radius: 12px; background: black; border: 2px solid #00d4ff; }
-        .controls { margin-top: 30px; display: flex; justify-content: center; gap: 20px; }
-        button { padding: 15px 40px; font-size: 1.3rem; cursor: pointer; border: none; border-radius: 10px; transition: all 0.3s ease; font-weight: bold; }
-        .prev { background: #e74c3c; color: white; }
-        .next { background: #2ecc71; color: white; }
-        button:hover { transform: scale(1.05); filter: brightness(1.2); }
-        .counter { margin-top: 15px; color: #888; font-size: 1rem; }
+        /* Spotify Karanlık Tema */
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+            font-family: 'Circular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .spotify-card {
+            background: linear-gradient(180deg, #121212 0%, #121212 100%);
+            width: 90%;
+            max-width: 450px;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .word-header {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #b3b3b3;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .word-title {
+            font-size: 48px;
+            font-weight: 900;
+            margin: 10px 0;
+            color: #1DB954; /* Spotify Yeşili */
+        }
+
+        .image-container img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 4px 60px rgba(0,0,0,0.5);
+        }
+
+        .video-box {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #333;
+            background: #000;
+        }
+
+        video { width: 100%; }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #4d4d4d;
+            border-radius: 2px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #1DB954;
+            border-radius: 2px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 32px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background: none;
+            border: none;
+            color: #b3b3b3;
+            font-size: 24px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn:hover { color: #FFFFFF; transform: scale(1.1); }
+
+        .btn-play {
+            background: #FFFFFF;
+            color: #000;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+
+        .btn-play:hover { transform: scale(1.05); background: #1DB954; }
+
+        .counter {
+            font-size: 12px;
+            color: #b3b3b3;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h2 style="margin:0; color:#888;">My Awasome Tübitak Word List</h2>
-    </div>
-
-    <div id="wordDisplay" class="word-title">YÜKLENİYOR...</div>
+<div class="spotify-card">
+    <div class="word-header">Şu an çalıyor</div>
+    <div id="wordDisplay" class="word-title">START</div>
     
-    <div class="media-box">
-        <img id="wordImg" src="" alt="Kelime Görseli">
-        
+    <div class="image-container">
+        <img id="wordImg" src="" alt="Album Cover">
+    </div>
+    
+    <div class="video-box">
         <video id="wordVideo" controls>
             <source id="videoSource" src="" type="video/mp4">
         </video>
     </div>
 
-    <audio id="wordAudio" src=""></audio>
+    <audio id="wordAudio"></audio>
+
+    <div class="progress-bar">
+        <div id="progressFill" class="progress-fill" style="width: 0%;"></div>
+    </div>
 
     <div class="controls">
-        <button class="prev" onclick="changeWord(-1)">GERİ</button>
-        <button class="next" onclick="changeWord(1)">İLERİ</button>
+        <button class="btn" onclick="changeWord(-1)">⏮</button>
+        <button class="btn btn-play" onclick="playCurrent()">▶</button>
+        <button class="btn" onclick="changeWord(1)">⏭</button>
     </div>
 
     <div class="counter" id="counterDisplay">1 / 100</div>
 </div>
 
 <script>
-// ---
 const wordData = [
-    // 1-10 arası
+    // Kelimeler, İBB linkleri ve senin WA videoların
     { word: "Probably", img: "https://www.ibb.istanbul/Link1", sound: "AUD-20260421-WA0010.mp3", video: "VID-20260421-WA0010.mp4" },
     { word: "Especially", img: "https://www.ibb.istanbul/Link2", sound: "AUD-20260421-WA0011.mp3", video: "VID-20260421-WA0107.mp4" },
-    { word: "Well", img: "https://www.ibb.istanbul/Link3", sound: "AUD-20260421-WA0012.mp3", video: "VID-20260421-WA0016.mp4" },
-    { word: "Usually", img: "https://www.ibb.istanbul/Link4", sound: "AUD-20260421-WA0013.mp3", video: "VID-20260421-WA0017.mp4" },
-    { word: "Already", img: "https://www.ibb.istanbul/Link5", sound: "AUD-20260421-WA0014.mp3", video: "VID-20260421-WA0019.mp4" },
-    { word: "Always", img: "https://www.ibb.istanbul/Link6", sound: "AUD-20260421-WA0015.mp3", video: "VID-20260421-WA0103.mp4" },
-    { word: "Sometimes", img: "https://www.ibb.istanbul/Link7", sound: "AUD-20260421-WA0016.mp3", video: "VID-20260421-WA0104.mp4" },
-    { word: "Together", img: "https://www.ibb.istanbul/Link8", sound: "AUD-20260421-WA0017.mp3", video: "VID-20260421-WA0105.mp4" },
-    { word: "Almost", img: "https://www.ibb.istanbul/Link9", sound: "AUD-20260421-WA0018.mp3", video: "VID-20260421-WA0106.mp4" },
-    { word: "Able", img: "https://www.ibb.istanbul/Link10", sound: "AUD-20260421-WA0019.mp3", video: "VID-20260419-WA0063.mp4" },
-
-    // ... 
-    // ... 
-
-    // 
     { word: "Clearly", img: "https://www.ibb.istanbul/Link91", sound: "AUD-20260421-WA0100.mp3", video: "VID-20260421-WA0014.mp4" },
-    { word: "Deeply", img: "https://www.ibb.istanbul/Link92", sound: "AUD-20260421-WA0101.mp3", video: "VID-20260421-WA0018.mp4" },
-    { word: "Simply", img: "https://www.ibb.istanbul/Link93", sound: "AUD-20260421-WA0102.mp3", video: "VID-20260421-WA0006.mp4" },
-    { word: "Currently", img: "https://www.ibb.istanbul/Link94", sound: "AUD-20260421-WA0103.mp3", video: "VID-20260421-WA0007.mp4" },
-    { word: "Immediately", img: "https://www.ibb.istanbul/Link95", sound: "AUD-20260421-WA0104.mp3", video: "VID-20260421-WA0008.mp4" },
-    { word: "Recently", img: "https://www.ibb.istanbul/Link96", sound: "AUD-20260421-WA0105.mp3", video: "VID-20260421-WA0009.mp4" },
-    { word: "Nearly", img: "https://www.ibb.istanbul/Link97", sound: "AUD-20260421-WA0106.mp3", video: "VID-20260421-WA0003.mp4" },
-    { word: "Easily", img: "https://www.ibb.istanbul/Link98", sound: "AUD-20260421-WA0107.mp3", video: "VID-20260421-WA0004.mp4" },
-    { word: "Exactly", img: "https://www.ibb.istanbul/Link99", sound: "AUD-20260421-WA0108.mp3", video: "VID-20260421-WA0005.mp4" },
     { word: "Strongly", img: "https://www.ibb.istanbul/Link100", sound: "AUD-20260421-WA0109.mp3", video: "VID-20260421-WA0002.mp4" }
+    // ... Toplam 100 kelime buraya eklenecek
 ];
 
 let currentIndex = 0;
 
 function updateDisplay() {
     const data = wordData[currentIndex];
-    
-    // 
     document.getElementById('wordDisplay').innerText = data.word;
-    document.getElementById('counterDisplay').innerText = (currentIndex + 1) + " / " + wordData.length;
-    
-    // Resim
     document.getElementById('wordImg').src = data.img;
-    
-    // Ses
     document.getElementById('wordAudio').src = "sounds/" + data.sound;
     
-    // Video
     const video = document.getElementById('wordVideo');
     document.getElementById('videoSource').src = "videos/" + data.video;
-    video.load(); 
+    video.load();
 
-    // Otomatik Ses Çal
-    setTimeout(() => {
-        document.getElementById('wordAudio').play().catch(e => console.log("Otomatik ses için etkileşim lazım."));
-    }, 500);
+    document.getElementById('counterDisplay').innerText = (currentIndex + 1) + " / " + wordData.length;
+    document.getElementById('progressFill').style.width = ((currentIndex + 1) / wordData.length * 100) + "%";
+}
+
+function playCurrent() {
+    document.getElementById('wordAudio').play();
 }
 
 function changeWord(step) {
