@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tübitak Word Hunt</title>
+    <title>My Awasome Tübitak Team Word List</title>
     <style>
-        /* Sade ve Modern Siyah Tema */
+        /* 
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: #000; color: white; margin: 0; padding: 15px; -webkit-tap-highlight-color: transparent; }
         
-        /* Ana Liste Tasarımı (PDF'deki gibi sade) */
         header h1 { font-size: 20px; text-align: center; margin: 25px 0; font-weight: 700; line-height: 1.4; }
         .list-container { max-width: 450px; margin: 0 auto; padding-bottom: 40px; }
         .word-item { 
@@ -20,13 +19,11 @@
         .word-item span { font-size: 15px; font-weight: 500; }
         .play-icon { width: 20px; height: 20px; opacity: 0.5; }
 
-        /* Popup Tasarımı */
         #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; overflow-y: auto; }
         .content { width: 92%; max-width: 400px; margin: 15px auto; text-align: center; }
         .close-btn { display: block; text-align: right; font-size: 32px; cursor: pointer; color: #666; padding: 10px; }
         #wordTitle { font-size: 26px; margin: 0 0 20px 0; text-transform: uppercase; font-weight: 900; text-align: left; }
 
-        /* Medya Yerleşimi (İki Üst, Bir Alt) */
         .top-media { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
         .box { border-radius: 18px; overflow: hidden; background: #111; border: 1px solid #282828; position: relative; }
         .small-box { aspect-ratio: 1/1; }
@@ -34,14 +31,12 @@
         
         img, video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Şarkı Başlatma Butonu */
         .song-play-btn {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.3); display: flex; justify-content: center; align-items: center;
             cursor: pointer; font-size: 45px; transition: opacity 0.3s;
         }
 
-        /* Alt Kontroller (Görsel amaçlı) */
         .controls { display: flex; justify-content: space-around; align-items: center; padding: 10px 20px; opacity: 0.7; font-size: 22px; }
         .play-main { font-size: 40px; opacity: 1; }
     </style>
@@ -59,17 +54,13 @@
             <div class="top-media">
                 <div class="box small-box"><img id="targetImg" src=""></div>
                 <div class="box small-box">
-                    <video id="songVid" playsinline>
-                        <source src="" type="video/mp4">
-                    </video>
+                    <video id="songVid" playsinline><source src="" type="video/mp4"></video>
                     <div id="songBtn" class="song-play-btn" onclick="toggleSong()">▶</div>
                 </div>
             </div>
 
             <div class="box bottom-media">
-                <video id="filmVid" playsinline controls>
-                    <source src="" type="video/mp4">
-                </video>
+                <video id="filmVid" playsinline controls><source src="" type="video/mp4"></video>
             </div>
 
             <div class="controls">
@@ -177,6 +168,7 @@
             "nearly": ["yaklaşık", "https://i.ibb.co/qYqgv6dG/MG-20260419-WA0061.jpg", "VID-20260419-WA0063.mp4", "VID-20260421-WA0003.mp4"],
             "currently": ["şu anda", "https://i.ibb.co/HDRz7vZN/MG-20260419-WA0073.jpg", "VID-20260419-WA0074.mp4", "VID-20260421-WA0007.mp4"],
             "clearly": ["net bir şekilde", "https://i.ibb.co/SwTBLYSP/MG-20260419-WA0075.jpg", "VID-20260419-WA0076.mp4", "VID-20260421-WA0014.mp4"],
+            "simply": ["basitçe", "https://i.ibb.co/HDRz7vZN/MG-20260419-WA0077.jpg", "VID-20260419-WA0078.mp4", "VID-20260421-0108.mp4"],
             "exactly": ["tam olarak", "https://i.ibb.co/9HHFmDRB/MG-20260419-WA0079.jpg", "VID-20260419-WA0080.mp4", "VID-20260421-WA0005.mp4"],
             "strongly": ["kuvvetle", "https://i.ibb.co/xS0nzDrT/MG-20260419-WA0081.jpg", "VID-20260419-WA0082.mp4", "VID-20260421-WA0002.mp4"]
         };
@@ -188,13 +180,18 @@
                 const item = document.createElement('div');
                 item.className = 'word-item';
                 item.innerHTML = `<span><b>${i+1}.</b> ${word} (${data[word][0]})</span> <img class="play-icon" src="https://cdn-icons-png.flaticon.com/512/0/375.png">`;
-                item.onclick = () => openPopup(word);
+                item.onclick = () => {
+                    // 
+                    history.pushState(null, null, "?word=" + word);
+                    openPopup(word);
+                };
                 listDiv.appendChild(item);
             });
         }
 
         function openPopup(word) {
             const vals = data[word];
+            if(!vals) return;
             document.getElementById('wordTitle').innerText = word.toUpperCase();
             document.getElementById('targetImg').src = vals[1];
             
@@ -225,9 +222,13 @@
             document.getElementById('overlay').style.display = 'none';
             document.body.style.overflow = 'auto';
             document.querySelectorAll('video').forEach(v => { v.pause(); v.currentTime = 0; });
+            // 
+            history.pushState(null, null, window.location.pathname);
         }
 
-        renderList();
-    </script>
-</body>
-</html>
+        window.onload = () => {
+            renderList();
+            // 
+            const urlParams = new URLSearchParams(window.location.search);
+            const wordFromUrl = urlParams.get('word');
+            if (wordFromUrl && data[
