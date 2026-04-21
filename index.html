@@ -3,40 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tübitak Word List</title>
+    <title>Tübitak Word Hunt</title>
     <style>
-        :root { --bg: #000; --green: #1DB954; --card: #1a1a1a; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 15px; }
-        .list-container { max-width: 500px; margin: 0 auto; }
+        :root { --bg: #000; --green: #1DB954; --card: #121212; --border: #282828; --text-dim: #b3b3b3; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: white; margin: 0; padding: 15px; -webkit-tap-highlight-color: transparent; }
+        
+        header h1 { font-size: 13px; letter-spacing: 2px; color: var(--green); text-align: center; text-transform: uppercase; margin: 20px 0 30px; font-weight: 800; }
+
+        /* Ana Liste */
+        .list-container { max-width: 500px; margin: 0 auto; padding-bottom: 50px; }
         .word-item { 
-            background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 8px;
-            cursor: pointer; border: 1px solid #333; display: flex; justify-content: space-between;
+            background: var(--card); padding: 18px; border-radius: 12px; margin-bottom: 10px;
+            cursor: pointer; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+            transition: background 0.2s;
         }
-        #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; justify-content: center; align-items: center; }
-        .content { width: 90%; max-width: 400px; text-align: center; }
-        .img-box { width: 100%; height: 160px; background: #222; border-radius: 15px; overflow: hidden; margin-bottom: 10px; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; }
-        video { width: 100%; border-radius: 15px; background: #000; margin-bottom: 10px; border: 1px solid #444; }
-        .close-btn { font-size: 30px; color: #fff; cursor: pointer; padding: 10px; display: inline-block; }
+        .word-item:active { background: #1a1a1a; transform: scale(0.98); }
+        .word-item b { color: var(--green); margin-right: 12px; font-size: 14px; }
+        .word-item span { font-weight: 600; letter-spacing: 0.5px; }
+
+        /* Popup Katmanı */
+        #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; overflow-y: auto; }
+        .content { width: 92%; max-width: 400px; margin: 25px auto; text-align: center; animation: fadeIn 0.3s ease; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .close-btn { display: block; text-align: right; font-size: 26px; color: var(--text-dim); cursor: pointer; margin-bottom: 5px; }
+        #wordTitle { font-size: 28px; font-weight: 900; margin: 0 0 25px 0; letter-spacing: 1px; text-transform: uppercase; text-align: left; }
+
+        /* Üst İkili Düzen */
+        .top-media { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        .small-box { width: 100%; aspect-ratio: 1/1; border-radius: 18px; overflow: hidden; background: #181818; border: 1px solid var(--border); position: relative; }
+        .small-box img, .small-box video { width: 100%; height: 100%; object-fit: cover; }
+        .label { position: absolute; top: 8px; left: 10px; font-size: 10px; font-weight: 800; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 4px; color: var(--text-dim); }
+
+        /* Alt Büyük Film Kutusu */
+        .bottom-media { width: 100%; aspect-ratio: 16/10; border-radius: 22px; overflow: hidden; background: #181818; border: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .bottom-media video { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Spotify Tarzı Butonlar */
+        .player-controls { display: flex; justify-content: space-around; align-items: center; padding: 0 10px; opacity: 0.8; }
+        .control-icon { font-size: 24px; color: #fff; cursor: pointer; }
+        .play-btn { font-size: 45px; }
+        .green-txt { color: var(--green); }
     </style>
 </head>
 <body>
 
-    <h1 style="text-align: center; color: var(--green); font-size: 16px;">MY AWESOME TÜBITAK TEAM WORD LIST</h1>
+    <header><h1>MY AWESOME TÜBITAK TEAM WORD LIST</h1></header>
+    
     <div id="list" class="list-container"></div>
 
     <div id="overlay">
         <div class="content">
-            <span class="close-btn" onclick="closePopup()">✕ KAPAT</span>
-            <h2 id="wordTitle" style="text-transform: uppercase;"></h2>
-            <div class="img-box"><img id="targetImg" src=""></div>
-            <video id="songVid" controls playsinline><source src="" type="video/mp4"></video>
-            <video id="filmVid" controls playsinline><source src="" type="video/mp4"></video>
+            <span class="close-btn" onclick="closePopup()">✕</span>
+            <h2 id="wordTitle">WORD</h2>
+            
+            <div class="top-media">
+                <div class="small-box">
+                    <div class="label">IMAGE</div>
+                    <img id="targetImg" src="">
+                </div>
+                <div class="small-box">
+                    <div class="label">SONG</div>
+                    <video id="songVid" playsinline loop muted onclick="this.paused ? this.play() : this.pause()">
+                        <source src="" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+
+            <div class="bottom-media">
+                <video id="filmVid" playsinline controls>
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="player-controls">
+                <span class="control-icon green-txt">🔀</span>
+                <span class="control-icon">⏮</span>
+                <span class="control-icon play-btn">⏸</span>
+                <span class="control-icon">⏭</span>
+                <span class="control-icon">🔁</span>
+            </div>
         </div>
     </div>
 
     <script>
-        // 
         const data = {
             "time": ["https://i.ibb.co/5xnVn282/MG-20260414-WA0001.jpg", "VID-20260414-WA0010.mp4", "VID-20260421-WA0027.mp4"],
             "year": ["https://i.ibb.co/5xnVn282/MG-20260414-WA0001.jpg", "VID-20260414-WA0011.mp4", "VID-20260421-WA0028.mp4"],
@@ -141,36 +192,38 @@
 
         const listDiv = document.getElementById('list');
 
-        // 
         function renderList() {
             Object.keys(data).forEach((word, i) => {
                 const item = document.createElement('div');
                 item.className = 'word-item';
-                item.innerHTML = `<span><b>${i+1}.</b> ${word.toUpperCase()}</span> <span>→</span>`;
+                item.innerHTML = `<span><b>${i+1}</b> ${word.toUpperCase()}</span> <span>›</span>`;
                 item.onclick = () => openPopup(word);
                 listDiv.appendChild(item);
             });
-
-            // 
-            const urlWord = new URLSearchParams(window.location.search).get('word');
-            if (urlWord && data[urlWord]) openPopup(urlWord);
         }
 
         function openPopup(word) {
             const vals = data[word];
-            document.getElementById('wordTitle').innerText = word;
+            document.getElementById('wordTitle').innerText = word.toUpperCase();
             document.getElementById('targetImg').src = vals[0];
-            document.getElementById('songVid').src = 'videolar/' + vals[1];
-            document.getElementById('filmVid').src = 'videolar/' + vals[2];
-            document.getElementById('overlay').style.display = 'flex';
+            
+            const sVid = document.getElementById('songVid');
+            const fVid = document.getElementById('filmVid');
+            
+            sVid.src = 'videolar/' + vals[1];
+            fVid.src = 'videolar/' + vals[2];
+            
+            document.getElementById('overlay').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            sVid.play();
         }
 
         function closePopup() {
             document.getElementById('overlay').style.display = 'none';
-            document.querySelectorAll('video').forEach(v => v.pause());
+            document.body.style.overflow = 'auto';
+            document.querySelectorAll('video').forEach(v => { v.pause(); v.currentTime = 0; });
         }
 
-        // Başlat
         renderList();
     </script>
 </body>
