@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Awesome Tübitak Team Word List</title>
+    <title>Eskal 100 - Final Developer Edition</title>
     <style>
         :root { --bg: #000; --card: #121212; --green: #1DB954; --grey: #282828; --border: #333; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 15px; }
-        .list-container { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; padding-bottom: 50px; }
+        .list-container { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
         .word-item { 
             background: #1a1a1a; padding: 16px; border-radius: 12px; cursor: pointer; 
             display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border);
@@ -32,7 +32,7 @@
 </head>
 <body>
 
-    <h1 style="text-align: center; font-size: 18px; letter-spacing: 1px; margin-bottom: 25px; color: var(--green);">MY AWESOME TÜBITAK TEAM WORD LIST</h1>
+    <h1 style="text-align: center; letter-spacing: 2px; margin-bottom: 20px;">ESKAL 100</h1>
     <div class="list-container" id="list"></div>
 
     <div id="overlay">
@@ -43,13 +43,13 @@
                 <div class="img-box"><img id="targetImg" src=""></div>
                 <div class="song-box" onclick="togglePlay('songVid', 'songBtn')">
                     <div class="play-overlay" id="songBtn"><div class="circle song-circle">▶</div></div>
-                    <video id="songVid" loop playsinline><source id="songSrc" src="" type="video/mp4"></video>
+                    <video id="songVid" loop playsinline><source src="" type="video/mp4"></video>
                 </div>
             </div>
             <div class="film-container">
                 <div class="main-player" onclick="togglePlay('filmVid', 'filmBtn')">
                     <div class="play-overlay" id="filmBtn"><div class="circle">▶</div></div>
-                    <video id="filmVid" loop playsinline><source id="filmSrc" src="" type="video/mp4"></video>
+                    <video id="filmVid" loop playsinline><source src="" type="video/mp4"></video>
                 </div>
                 <div class="nav-btns">
                     <button class="icon-btn" onclick="move(-1)">⏮</button>
@@ -80,7 +80,7 @@
             "state": { img: "https://i.ibb.co/SDzF8Rkp/MG-20260415-WA0130.jpg", song: "VID-20260416-WA0008.mp4", film: "VID-20260421-WA0039.mp4" },
             "country": { img: "https://i.ibb.co/h1TDP9jW/MG-20260415-WA0131.jpg", song: "VID-20260416-WA0013.mp4", film: "VID-20260421-WA0043.mp4" },
             "problem": { img: "https://i.ibb.co/KzysZqtj/MG-20260415-WA0132.jpg", song: "VID-20260416-WA0014.mp4", film: "VID-20260421-WA0044.mp4" },
-            "hand": { img: "https://i.ibb.co/MxDhFX00/MG-20260415-WA0134.jpg", song: "VID-20260416-WA0015.mp4", film: "VID-20260421-WA0045.mp4" },
+            "hand": { img: "https://i.ibb.co/MxDhFXV0/MG-20260415-WA0134.jpg", song: "VID-20260416-WA0015.mp4", film: "VID-20260421-WA0045.mp4" },
             "part": { img: "https://i.ibb.co/rG4PX3Pw/MG-20260415-WA0135.jpg", song: "VID-20260416-WA0016.mp4", film: "VID-20260421-WA0046.mp4" },
             "place": { img: "https://i.ibb.co/zWQfmBkJ/MG-20260415-WA0136.jpg", song: "VID-20260416-WA0017.mp4", film: "VID-20260421-WA0047.mp4" },
             "case": { img: "https://i.ibb.co/R40HyyHX/MG-20260415-WA0137.jpg", song: "VID-20260416-WA0018.mp4", film: "VID-20260421-WA0048.mp4" },
@@ -103,7 +103,7 @@
             "need": { img: "https://i.ibb.co/dssZjnxH/MG-20260415-WA0171.jpg", song: "VID-20260416-WA0036.mp4", film: "VID-20260421-WA0065.mp4" },
             "feel": { img: "https://i.ibb.co/zht3nyYv/MG-20260415-WA0173.jpg", song: "VID-20260416-WA0037.mp4", film: "VID-20260421-WA0066.mp4" },
             "seem": { img: "https://i.ibb.co/x02JTXb/MG-20260415-WA0174.jpg", song: "VID-20260416-WA0038.mp4", film: "VID-20260421-WA0067.mp4" },
-            "become": { img: "https://i.ibb.co/PK3QGR7/MG-20260415-WA0175.jpg", song: "VID-20260416-WA0039.mp4", film: "VID-20260421-WA0067.mp4" },
+            "become": { img: "https://i.ibb.co/PK3QGR7/MG-20260415-WA0175.jpg", song: "VID-20260416-WA0038.mp4", film: "VID-20260421-WA0067.mp4" },
             "leave": { img: "https://i.ibb.co/0VqFcSXR/MG-20260415-WA0177.jpg", song: "VID-20260416-WA0040.mp4", film: "VID-20260421-WA0068.mp4" },
             "call": { img: "https://i.ibb.co/3YdZpwSM/MG-20260415-WA0180.jpg", song: "VID-20260416-WA0041.mp4", film: "VID-20260421-WA0069.mp4" },
             "keep": { img: "https://i.ibb.co/VY65Nnxm/MG-20260415-WA0182.jpg", song: "VID-20260416-WA0042.mp4", film: "VID-20260421-WA0070.mp4" },
@@ -140,17 +140,17 @@
             "able": { img: "https://i.ibb.co/qhM3WzR/MG-20260419-WA0010.jpg", song: "VID-20260419-WA0009.mp4", film: "VID-20260419-WA0063.mp4" },
             "very": { img: "https://i.ibb.co/SXRWpwQv/MG-20260419-WA0012.jpg", song: "VID-20260419-WA0013.mp4", film: "VID-20260421-WA0100.mp4" },
             "often": { img: "https://i.ibb.co/Y4xkYwLK/MG-20260419-WA0014.jpg", song: "VID-20260419-WA0015.mp4", film: "VID-20260421-WA0012.mp4" },
-            "really": { img: "https://i.ibb.co/GfT7xW93/MG-20260419-WA0016.jpg", song: "VID-20260419-WA0019.mp4", film: "VID-20260421-0101.mp4" },
-            "quickly": { img: "https://i.ibb.co/Kck4kb8Z/MG-20260419-WA0018.jpg", song: "VID-20260419-WA0017.mp4", film: "VID-20260421-0102.mp4" },
+            "really": { img: "https://i.ibb.co/GfT7xW93/MG-20260419-WA0016.jpg", song: "VID-20260419-WA0019.mp4", film: "VID-20260421-WA0101.mp4" },
+            "quickly": { img: "https://i.ibb.co/Kck4kb8Z/MG-20260419-WA0018.jpg", song: "VID-20260419-WA0017.mp4", film: "VID-20260421-WA0102.mp4" },
             "slowly": { img: "https://i.ibb.co/xKMDJZsb/MG-20260419-WA0020.jpg", song: "VID-20260419-WA0021.mp4", film: "VID-20260421-WA0011.mp4" },
             "well": { img: "https://i.ibb.co/WWy6nzwp/MG-20260419-WA0022.jpg", song: "VID-20260419-WA0023.mp4", film: "VID-20260421-WA0016.mp4" },
-            "always": { img: "https://i.ibb.co/PZWGfV7L/MG-20260419-WA0024.jpg", song: "VID-20260419-WA0025.mp4", film: "VID-20260421-0103.mp4" },
-            "sometimes": { img: "https://i.ibb.co/k2bhjHNy/MG-20260419-WA0027.jpg", song: "VID-20260419-WA0027.mp4", film: "VID-20260421-0104.mp4" },
+            "always": { img: "https://i.ibb.co/PZWGfV7L/MG-20260419-WA0024.jpg", song: "VID-20260419-WA0025.mp4", film: "VID-20260421-WA0103.mp4" },
+            "sometimes": { img: "https://i.ibb.co/k2bhjHNy/MG-20260419-WA0027.jpg", song: "VID-20260419-WA0027.mp4", film: "VID-20260421-WA0104.mp4" },
             "usually": { img: "https://i.ibb.co/jZZT7rtG/MG-20260419-WA0029.jpg", song: "VID-20260419-WA0029.mp4", film: "VID-20260421-WA0017.mp4" },
-            "together": { img: "https://i.ibb.co/jvf1KzWG/MG-20260419-WA0038.jpg", song: "VID-20260419-WA0039.mp4", film: "VID-20260421-0105.mp4" },
+            "together": { img: "https://i.ibb.co/jvf1KzWG/MG-20260419-WA0038.jpg", song: "VID-20260419-WA0039.mp4", film: "VID-20260421-WA0105.mp4" },
             "already": { img: "https://i.ibb.co/Y4SHhvd7/MG-20260419-WA0040.jpg", song: "VID-20260419-WA0041.mp4", film: "VID-20260421-WA0019.mp4" },
-            "almost": { img: "https://i.ibb.co/JR6fTbzT/MG-20260419-WA0043.jpg", song: "VID-20260419-WA0044.mp4", film: "VID-20260421-0106.mp4" },
-            "especially": { img: "https://i.ibb.co/N6XnCqVM/MG-20260419-WA0048.jpg", song: "VID-20260419-WA0049.mp4", film: "VID-20260421-0107.mp4" },
+            "almost": { img: "https://i.ibb.co/JR6fTbzT/MG-20260419-WA0043.jpg", song: "VID-20260419-WA0044.mp4", film: "VID-20260421-WA0106.mp4" },
+            "especially": { img: "https://i.ibb.co/N6XnCqVM/MG-20260419-WA0048.jpg", song: "VID-20260419-WA0049.mp4", film: "VID-20260421-WA0107.mp4" },
             "probably": { img: "https://i.ibb.co/XrTf5MH6/MG-20260419-WA0050.jpg", song: "VID-20260419-WA0051.mp4", film: "VID-20260421-WA0010.mp4" },
             "finally": { img: "https://i.ibb.co/mCrcWws9/MG-20260419-WA0052.jpg", song: "VID-20260419-WA0053.mp4", film: "VID-20260421-WA0004.mp4" },
             "easily": { img: "https://i.ibb.co/JRk8FnZ1/MG-20260419-WA0054.jpg", song: "VID-20260419-WA0057.mp4", film: "VID-20260421-WA0004.mp4" },
@@ -166,19 +166,19 @@
         const wordList = Object.keys(data);
         const container = document.getElementById('list');
 
-        // 
+        // Sayfa yüklendiğinde URL'de kelime var mı bak (QR için)
         window.onload = () => {
             const urlParams = new URLSearchParams(window.location.search);
             const word = urlParams.get('word');
             if (word && data[word]) openPopup(word);
         };
 
-        // 
         wordList.forEach((word, index) => {
             let div = document.createElement('div');
             div.className = 'word-item';
-            div.innerHTML = `<span><b>${index + 1}.</b> ${word.toUpperCase()}</span><span style="color:var(--green); font-size:11px;">#TÜBİTAK</span>`;
+            div.innerHTML = `<span><b>${index + 1}.</b> ${word.toUpperCase()}</span><span style="color:var(--green); font-size:11px;">#${word}</span>`;
             div.onclick = () => {
+                // URL'yi güncelle (QR kodun gideceği yer)
                 const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?word=' + word;
                 window.history.pushState({path:newUrl},'',newUrl);
                 openPopup(word);
@@ -186,4 +186,5 @@
             container.appendChild(div);
         });
 
-  
+        function openPopup(word) {
+           
