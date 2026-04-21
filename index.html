@@ -3,162 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burak Developer | Spotify Word Player</title>
+    <title>Burak Developer | Word List Master</title>
     <style>
-        /* Tam olarak ekran görüntüsündeki o siyah, premium tema */
-        body {
-            background-color: #000000;
-            color: white;
-            font-family: 'Circular', sans-serif;
-            display: flex;
-            justify-content: center;
-            padding-top: 50px;
-            margin: 0;
+        body { background: #000; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        
+        /* Üstteki Aktif Oynatıcı Paneli */
+        .active-player {
+            width: 100%; max-width: 450px; background: #121212; padding: 20px; border-radius: 20px; 
+            margin-bottom: 20px; position: sticky; top: 10px; z-index: 100; border: 1px solid #333;
         }
+        .active-word { font-size: 28px; font-weight: bold; color: #1DB954; margin-bottom: 10px; text-transform: uppercase; }
+        video { width: 100%; border-radius: 12px; border: 1px solid #1DB954; margin-top: 10px; }
+        img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
 
-        .main-card {
-            background-color: #121212;
-            width: 380px;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
+        /* Kelime Listesi Alanı */
+        .list-container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 8px; }
+        .word-row {
+            background: #181818; padding: 15px; border-radius: 12px; display: flex; 
+            justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s;
         }
-
-        .word-name {
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-
-        /* Üstteki iki küçük görsel alanı */
-        .top-images {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .top-images img, .top-images .text-box {
-            width: 48%;
-            aspect-ratio: 4/3;
-            border-radius: 12px;
-            object-fit: cover;
-        }
-
-        .text-box {
-            background-color: #1a3a4a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            padding: 5px;
-        }
-
-        /* Ana Video Alanı (Harry Potter'ın olduğu yer) */
-        .video-container {
-            background-color: #000;
-            border-radius: 20px;
-            padding: 10px;
-            border: 1px solid #333;
-            margin-bottom: 20px;
-        }
-
-        video {
-            width: 100%;
-            border-radius: 15px;
-        }
-
-        /* Alt Kontrol Paneli (Müzik çalar ikonları) */
-        .player-controls {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        .btn {
-            background: none;
-            border: none;
-            color: #b3b3b3;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .btn:hover { color: white; }
-
-        .play-line {
-            width: 100%;
-            height: 4px;
-            background: #444;
-            margin: 15px 0;
-            border-radius: 2px;
-        }
+        .word-row:hover { background: #282828; transform: scale(1.02); }
+        .word-info { display: flex; align-items: center; gap: 15px; }
+        .num { color: #888; font-size: 14px; width: 25px; }
+        .eng { font-weight: bold; font-size: 17px; }
+        .tr { color: #b3b3b3; font-size: 14px; }
+        .play-btn { color: #1DB954; font-size: 20px; }
     </style>
 </head>
 <body>
 
-<div class="main-card">
-    <div id="wordTitle" class="word-name">TIME</div>
-
-    <div class="top-images">
-        <img id="img1" src="https://www.ibb.istanbul/Link88_1" alt="Resim 1">
-        <div class="text-box" id="imgText">It's right here to make you again...</div>
-    </div>
-
-    <div class="video-container">
-        <video id="mainVideo" controls>
-            <source id="videoSrc" src="videos/VID-20260421-WA0027.mp4" type="video/mp4">
-        </video>
-    </div>
-
-    <div class="play-line"></div>
-
-    <div class="player-controls">
-        <button class="btn">⇄</button>
-        <button class="btn" onclick="changeWord(-1)">⏮</button>
-        <button class="btn" style="font-size: 30px;" onclick="document.getElementById('audioTrack').play()">⏸</button>
-        <button class="btn" onclick="changeWord(1)">⏭</button>
-        <button class="btn">↻</button>
-    </div>
-
-    <audio id="audioTrack"></audio>
+<div class="active-player" id="player">
+    <div class="active-word" id="currentWord">BİR KELİME SEÇ</div>
+    <img id="currentImg" src="https://www.ibb.istanbul/LinkDefault" alt="Resim">
+    <video id="currentVid" controls><source id="vidSrc" src="" type="video/mp4"></video>
+    <audio id="currentAud"></audio>
 </div>
 
+<div class="list-container" id="listArea"></div>
+
 <script>
-// Senin tüm o 100'lük arşivin (Ses, Video, Resim)
+// Elimizdeki 100'lük dev arşivin bir kısmı (Sıralama PDF'indeki gibi)
 const wordData = [
-    { word: "Time", img: "https://www.ibb.istanbul/Link88", sound: "AUD-20260421-WA0097.mp3", video: "VID-20260421-WA0027.mp4" },
-    { word: "Year", img: "https://www.ibb.istanbul/Link89", sound: "AUD-20260421-WA0098.mp3", video: "VID-20260421-WA0028.mp4" },
-    { word: "People", img: "https://www.ibb.istanbul/Link90", sound: "AUD-20260421-WA0099.mp3", video: "VID-20260421-WA0029.mp4" },
-    { word: "Strongly", img: "https://www.ibb.istanbul/Link100", sound: "AUD-20260421-WA0109.mp3", video: "VID-20260421-WA0002.mp4" },
-    // ... Aradaki tüm 100 kelime burada ...
+    { id: 1, eng: "Time", tr: "Zaman", img: "ibb.istanbul/Link1", aud: "AUD-20260421-WA0097.mp3", vid: "VID-20260421-WA0027.mp4" },
+    { id: 2, eng: "Year", tr: "Yıl", img: "ibb.istanbul/Link2", aud: "AUD-20260421-WA0098.mp3", vid: "VID-20260421-WA0028.mp4" },
+    { id: 3, eng: "People", tr: "İnsanlar", img: "ibb.istanbul/Link3", aud: "AUD-20260421-WA0099.mp3", vid: "VID-20260421-WA0029.mp4" },
+    { id: 4, eng: "Way", tr: "Yol", img: "ibb.istanbul/Link4", aud: "AUD-20260421-WA0086.mp3", vid: "VID-20260421-WA0030.mp4" },
+    // ... Bu liste böyle 100'e kadar gidiyor kanka
+    { id: 100, eng: "Strongly", tr: "Güçlüce", img: "ibb.istanbul/Link100", aud: "AUD-20260421-WA0109.mp3", vid: "VID-20260421-WA0002.mp4" }
 ];
 
-let currentIndex = 0;
+const listArea = document.getElementById('listArea');
 
-function updateDisplay() {
-    const data = wordData[currentIndex];
-    document.getElementById('wordTitle').innerText = data.word;
-    document.getElementById('img1').src = data.img;
-    document.getElementById('audioTrack').src = "sounds/" + data.sound;
+// Listeyi oluşturma
+wordData.forEach((item, index) => {
+    const row = document.createElement('div');
+    row.className = 'word-row';
+    row.onclick = () => playWord(index);
+    row.innerHTML = `
+        <div class="word-info">
+            <span class="num">${item.id}.</span>
+            <div><span class="eng">${item.eng}</span> <span class="tr">(${item.tr})</span></div>
+        </div>
+        <div class="play-btn">▶</div>
+    `;
+    listArea.appendChild(row);
+});
+
+// Kelimeye basınca medyayı yükleyen fonksiyon
+function playWord(i) {
+    const data = wordData[i];
+    document.getElementById('currentWord').innerText = data.eng;
+    document.getElementById('currentImg').src = "https://www.ibb.istanbul/" + data.img;
+    document.getElementById('currentAud').src = "sounds/" + data.aud;
+    document.getElementById('vidSrc').src = "videos/" + data.vid;
     
-    const video = document.getElementById('mainVideo');
-    document.getElementById('videoSrc').src = "videos/" + data.video;
-    video.load();
-    
-    document.getElementById('audioTrack').play().catch(() => {});
+    const v = document.getElementById('currentVid');
+    v.load(); v.play();
+    document.getElementById('currentAud').play();
 }
-
-function changeWord(step) {
-    currentIndex += step;
-    if (currentIndex < 0) currentIndex = wordData.length - 1;
-    if (currentIndex >= wordData.length) currentIndex = 0;
-    updateDisplay();
-}
-
-window.onload = updateDisplay;
 </script>
-
 </body>
 </html>
