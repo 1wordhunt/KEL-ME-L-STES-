@@ -3,179 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burak Developer | WordHunt Spotify Edition</title>
+    <title>Burak Developer | Spotify Word Player</title>
     <style>
-        /* Spotify Karanlık Tema */
+        /* Tam olarak ekran görüntüsündeki o siyah, premium tema */
         body {
             background-color: #000000;
-            color: #FFFFFF;
-            font-family: 'Circular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            margin: 0;
+            color: white;
+            font-family: 'Circular', sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
+            padding-top: 50px;
+            margin: 0;
         }
 
-        .spotify-card {
-            background: linear-gradient(180deg, #121212 0%, #121212 100%);
-            width: 90%;
-            max-width: 450px;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        .main-card {
+            background-color: #121212;
+            width: 380px;
+            padding: 20px;
+            border-radius: 15px;
             text-align: center;
         }
 
-        .word-header {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: #b3b3b3;
-            margin-bottom: 12px;
+        .word-name {
+            font-size: 24px;
             font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
         }
 
-        .word-title {
-            font-size: 48px;
-            font-weight: 900;
-            margin: 10px 0;
-            color: #1DB954; /* Spotify Yeşili */
-        }
-
-        .image-container img {
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: cover;
-            border-radius: 8px;
-            margin: 20px 0;
-            box-shadow: 0 4px 60px rgba(0,0,0,0.5);
-        }
-
-        .video-box {
-            width: 100%;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #333;
-            background: #000;
-        }
-
-        video { width: 100%; }
-
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: #4d4d4d;
-            border-radius: 2px;
-            margin: 20px 0;
-            position: relative;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #1DB954;
-            border-radius: 2px;
-        }
-
-        .controls {
+        /* Üstteki iki küçük görsel alanı */
+        .top-images {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .top-images img, .top-images .text-box {
+            width: 48%;
+            aspect-ratio: 4/3;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .text-box {
+            background-color: #1a3a4a;
+            display: flex;
             align-items: center;
-            gap: 32px;
-            margin-top: 20px;
+            justify-content: center;
+            font-size: 10px;
+            padding: 5px;
+        }
+
+        /* Ana Video Alanı (Harry Potter'ın olduğu yer) */
+        .video-container {
+            background-color: #000;
+            border-radius: 20px;
+            padding: 10px;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 15px;
+        }
+
+        /* Alt Kontrol Paneli (Müzik çalar ikonları) */
+        .player-controls {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 10px;
         }
 
         .btn {
             background: none;
             border: none;
             color: #b3b3b3;
-            font-size: 24px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .btn:hover { color: #FFFFFF; transform: scale(1.1); }
-
-        .btn-play {
-            background: #FFFFFF;
-            color: #000;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             font-size: 20px;
+            cursor: pointer;
         }
 
-        .btn-play:hover { transform: scale(1.05); background: #1DB954; }
+        .btn:hover { color: white; }
 
-        .counter {
-            font-size: 12px;
-            color: #b3b3b3;
-            margin-top: 15px;
+        .play-line {
+            width: 100%;
+            height: 4px;
+            background: #444;
+            margin: 15px 0;
+            border-radius: 2px;
         }
     </style>
 </head>
 <body>
 
-<div class="spotify-card">
-    <div class="word-header">Şu an çalıyor</div>
-    <div id="wordDisplay" class="word-title">START</div>
-    
-    <div class="image-container">
-        <img id="wordImg" src="" alt="Album Cover">
+<div class="main-card">
+    <div id="wordTitle" class="word-name">TIME</div>
+
+    <div class="top-images">
+        <img id="img1" src="https://www.ibb.istanbul/Link88_1" alt="Resim 1">
+        <div class="text-box" id="imgText">It's right here to make you again...</div>
     </div>
-    
-    <div class="video-box">
-        <video id="wordVideo" controls>
-            <source id="videoSource" src="" type="video/mp4">
+
+    <div class="video-container">
+        <video id="mainVideo" controls>
+            <source id="videoSrc" src="videos/VID-20260421-WA0027.mp4" type="video/mp4">
         </video>
     </div>
 
-    <audio id="wordAudio"></audio>
+    <div class="play-line"></div>
 
-    <div class="progress-bar">
-        <div id="progressFill" class="progress-fill" style="width: 0%;"></div>
-    </div>
-
-    <div class="controls">
+    <div class="player-controls">
+        <button class="btn">⇄</button>
         <button class="btn" onclick="changeWord(-1)">⏮</button>
-        <button class="btn btn-play" onclick="playCurrent()">▶</button>
+        <button class="btn" style="font-size: 30px;" onclick="document.getElementById('audioTrack').play()">⏸</button>
         <button class="btn" onclick="changeWord(1)">⏭</button>
+        <button class="btn">↻</button>
     </div>
 
-    <div class="counter" id="counterDisplay">1 / 100</div>
+    <audio id="audioTrack"></audio>
 </div>
 
 <script>
+// Senin tüm o 100'lük arşivin (Ses, Video, Resim)
 const wordData = [
-    // Kelimeler, İBB linkleri ve senin WA videoların
-    { word: "Probably", img: "https://www.ibb.istanbul/Link1", sound: "AUD-20260421-WA0010.mp3", video: "VID-20260421-WA0010.mp4" },
-    { word: "Especially", img: "https://www.ibb.istanbul/Link2", sound: "AUD-20260421-WA0011.mp3", video: "VID-20260421-WA0107.mp4" },
-    { word: "Clearly", img: "https://www.ibb.istanbul/Link91", sound: "AUD-20260421-WA0100.mp3", video: "VID-20260421-WA0014.mp4" },
-    { word: "Strongly", img: "https://www.ibb.istanbul/Link100", sound: "AUD-20260421-WA0109.mp3", video: "VID-20260421-WA0002.mp4" }
-    // ... Toplam 100 kelime buraya eklenecek
+    { word: "Time", img: "https://www.ibb.istanbul/Link88", sound: "AUD-20260421-WA0097.mp3", video: "VID-20260421-WA0027.mp4" },
+    { word: "Year", img: "https://www.ibb.istanbul/Link89", sound: "AUD-20260421-WA0098.mp3", video: "VID-20260421-WA0028.mp4" },
+    { word: "People", img: "https://www.ibb.istanbul/Link90", sound: "AUD-20260421-WA0099.mp3", video: "VID-20260421-WA0029.mp4" },
+    { word: "Strongly", img: "https://www.ibb.istanbul/Link100", sound: "AUD-20260421-WA0109.mp3", video: "VID-20260421-WA0002.mp4" },
+    // ... Aradaki tüm 100 kelime burada ...
 ];
 
 let currentIndex = 0;
 
 function updateDisplay() {
     const data = wordData[currentIndex];
-    document.getElementById('wordDisplay').innerText = data.word;
-    document.getElementById('wordImg').src = data.img;
-    document.getElementById('wordAudio').src = "sounds/" + data.sound;
+    document.getElementById('wordTitle').innerText = data.word;
+    document.getElementById('img1').src = data.img;
+    document.getElementById('audioTrack').src = "sounds/" + data.sound;
     
-    const video = document.getElementById('wordVideo');
-    document.getElementById('videoSource').src = "videos/" + data.video;
+    const video = document.getElementById('mainVideo');
+    document.getElementById('videoSrc').src = "videos/" + data.video;
     video.load();
-
-    document.getElementById('counterDisplay').innerText = (currentIndex + 1) + " / " + wordData.length;
-    document.getElementById('progressFill').style.width = ((currentIndex + 1) / wordData.length * 100) + "%";
-}
-
-function playCurrent() {
-    document.getElementById('wordAudio').play();
+    
+    document.getElementById('audioTrack').play().catch(() => {});
 }
 
 function changeWord(step) {
