@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Awasome Tübitak Team Word List</title>
+    <title>Tübitak Word Hunt</title>
     <style>
-        /* 
+        /* Sade ve Modern Siyah Tema */
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: #000; color: white; margin: 0; padding: 15px; -webkit-tap-highlight-color: transparent; }
         
         header h1 { font-size: 20px; text-align: center; margin: 25px 0; font-weight: 700; line-height: 1.4; }
@@ -181,7 +181,7 @@
                 item.className = 'word-item';
                 item.innerHTML = `<span><b>${i+1}.</b> ${word} (${data[word][0]})</span> <img class="play-icon" src="https://cdn-icons-png.flaticon.com/512/0/375.png">`;
                 item.onclick = () => {
-                    // 
+                    // URL Parametresini Güncelle (QR Desteği için)
                     history.pushState(null, null, "?word=" + word);
                     openPopup(word);
                 };
@@ -222,13 +222,13 @@
             document.getElementById('overlay').style.display = 'none';
             document.body.style.overflow = 'auto';
             document.querySelectorAll('video').forEach(v => { v.pause(); v.currentTime = 0; });
-            // 
+            // Kapatınca URL'yi temizle
             history.pushState(null, null, window.location.pathname);
         }
 
         window.onload = () => {
             renderList();
-            // 
+            // QR ile tıklandığında otomatik açma
             const urlParams = new URLSearchParams(window.location.search);
             const wordFromUrl = urlParams.get('word');
             if (wordFromUrl && data[
