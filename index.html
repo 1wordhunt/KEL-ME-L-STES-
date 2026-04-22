@@ -3,25 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Awasome Tübitak Tübitak team Word List</title>
+    <title>Tübitak Word List</title>
     <style>
         body { font-family: sans-serif; background: #000; color: #fff; margin: 0; padding: 10px; -webkit-tap-highlight-color: transparent; }
+        /* Başlık Rengi Beyaz Yapıldı */
         h1 { font-size: 16px; text-align: center; color: #fff; margin: 20px 0; text-transform: uppercase; letter-spacing: 1px; }
+        
         .word-list { max-width: 500px; margin: 0 auto; padding-bottom: 50px; }
         .word-card { background: #111; padding: 14px; border-radius: 8px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; cursor: pointer; }
         .word-card b { color: #666; margin-right: 6px; }
         .play-btn { width: 18px; height: 18px; opacity: 0.4; filter: invert(1); }
+        
         #details { display: none; position: fixed; inset: 0; background: #000; z-index: 999; overflow-y: auto; padding: 15px; }
         .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px; }
         .close-x { font-size: 26px; color: #555; cursor: pointer; }
         #wordTitle { font-size: 20px; text-transform: uppercase; margin: 0; letter-spacing: 1px; }
+        
         .media-container { max-width: 400px; margin: 0 auto; }
         .top-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
         .box { background: #000; border: 1px solid #222; border-radius: 12px; overflow: hidden; position: relative; }
         .square { aspect-ratio: 1/1; }
         .video-box { width: 100%; aspect-ratio: 16/9; }
         img, video { width: 100%; height: 100%; object-fit: cover; }
+        
         .custom-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.1); font-size: 40px; color: #fff; cursor: pointer; z-index: 2; }
+        
         .nav-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 25px; }
         .nav-btn { background: #111; color: #888; border: 1px solid #222; padding: 12px; border-radius: 8px; text-align: center; cursor: pointer; font-size: 14px; }
         .nav-btn:active { background: #222; color: #fff; }
@@ -58,7 +64,7 @@
 
     <script>
         const words = {
-            "time": ["zaman", "https://i.ibb.co/TDFW5wWg/MG-20260414-WA0000.jpg", "VID-20260414-WA0010.mp4", "VID-20260421-WA0027.mp4"],
+            "time": ["zaman", "https://i.ibb.co/5xnVn282/MG-20260414-WA0001.jpg", "VID-20260414-WA0010.mp4", "VID-20260421-WA0027.mp4"],
             "year": ["yıl", "https://i.ibb.co/5xnVn282/MG-20260414-WA0001.jpg", "VID-20260414-WA0011.mp4", "VID-20260421-WA0028.mp4"],
             "people": ["insanlar", "https://i.ibb.co/d4zw3Mt5/MG-20260414-WA0002.jpg", "VID-20260414-WA0012.mp4", "VID-20260421-WA0029.mp4"],
             "way": ["yol", "https://i.ibb.co/PGq2n0WK/MG-20260414-WA0003.jpg", "VID-20260414-WA0013.mp4", "VID-20260421-WA0030.mp4"],
@@ -99,7 +105,7 @@
             "need": ["ihtiyaç", "https://i.ibb.co/dssZjnxH/MG-20260415-WA0171.jpg", "VID-20260416-WA0036.mp4", "VID-20260421-WA0065.mp4"],
             "feel": ["hissetmek", "https://i.ibb.co/zht3nyYv/MG-20260415-WA0173.jpg", "VID-20260416-WA0037.mp4", "VID-20260421-WA0066.mp4"],
             "seem": ["görünmek", "https://i.ibb.co/x02JTXb/MG-20260415-WA0174.jpg", "VID-20260416-WA0038.mp4", "VID-20260421-WA0067.mp4"],
-            "become": ["olmak", "https://i.ibb.co/PK3QGR7/MG-20260415-WA0175.jpg", "VID-20260416-WA0038.mp4", "VID-20260421-WA0067.mp4"],
+            "become": ["olmak", "https://i.ibb.co/PK3QGR7/MG-20260415-WA0175.jpg", "VID-20260416-WA0039.mp4", "VID-20260421-WA0067.mp4"],
             "leave": ["ayrılmak", "https://i.ibb.co/0VqFcSXR/MG-20260415-WA0177.jpg", "VID-20260416-WA0040.mp4", "VID-20260421-WA0068.mp4"],
             "call": ["aramak", "https://i.ibb.co/3YdZpwSM/MG-20260415-WA0180.jpg", "VID-20260416-WA0041.mp4", "VID-20260421-WA0069.mp4"],
             "keep": ["tutmak", "https://i.ibb.co/VY65Nnxm/MG-20260415-WA0182.jpg", "VID-20260416-WA0042.mp4", "VID-20260421-WA0070.mp4"],
@@ -186,6 +192,7 @@
             
             const v1 = document.getElementById('v1');
             const v2 = document.getElementById('v2');
+            // 'videolar/' dizini kontrolü yapıldı
             v1.src = 'videolar/' + d[2];
             v2.src = 'videolar/' + d[3];
             v1.load(); v2.load();
