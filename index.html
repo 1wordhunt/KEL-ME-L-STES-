@@ -192,7 +192,6 @@
             const v1 = document.getElementById('v1');
             const v2 = document.getElementById('v2');
             
-            // Source güncelleme ve reload işlemi
             document.getElementById('v1s').src = 'videolar/' + d[2];
             document.getElementById('v2s').src = 'videolar/' + d[3];
             
@@ -224,4 +223,7 @@
             document.body.style.overflow = 'auto';
             location.hash = "";
             document.getElementById('v1').pause();
-            document.getElementById
+            document.getElementById('v2').pause();
+        }
+
+        function nextWo
