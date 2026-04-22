@@ -7,7 +7,7 @@
     <style>
         body { font-family: sans-serif; background: #000; color: #fff; margin: 0; padding: 10px; -webkit-tap-highlight-color: transparent; }
         h1 { font-size: 16px; text-align: center; color: #fff; margin: 20px 0; text-transform: uppercase; letter-spacing: 1px; }
-        .word-list { max-width: 500px; margin: 0 auto; padding-bottom: 50px; }
+        .word-list { max-width: 500px; margin: 0 auto; padding-bottom: 50px; min-height: 200px; }
         .word-card { background: #111; padding: 14px; border-radius: 8px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; cursor: pointer; }
         .word-card b { color: #666; margin-right: 6px; }
         .play-btn { width: 18px; height: 18px; opacity: 0.4; filter: invert(1); }
@@ -30,7 +30,7 @@
 <body>
 
     <h1>MY AWESOME TÜBITAK TEAM WORD LIST</h1>
-    <div id="wordList" class="word-list"></div>
+    <div id="wordList" class="word-list">Lütfen bekleyin, kelimeler yükleniyor...</div>
 
     <div id="details">
         <div class="header-row">
@@ -134,19 +134,19 @@
             "bad": ["kötü", "https://i.ibb.co/5g4Tn2cJ/MG-20260419-WA0006.jpg", "VID-20260419-WA0007.mp4", "VID-20260421-WA0098.mp4"],
             "same": ["aynı", "https://i.ibb.co/VYxJ8fm8/MG-20260419-WA0008.jpg", "VID-20260419-WA0011.mp4", "VID-20260421-WA0099.mp4"],
             "able": ["yapabilmek", "https://i.ibb.co/qhM3WzR/MG-20260419-WA0010.jpg", "VID-20260419-WA0009.mp4", "VID-20260419-WA0063.mp4"],
-            "very": ["çok", "https://i.ibb.co/SXRWpwQv/MG-20260419-WA0012.jpg", "VID-20260419-WA0013.mp4", "VID-20260421-WA0100.mp4"],
+            "very": ["çok", "https://i.ibb.co/SXRWpwQv/MG-20260419-WA0012.jpg", "VID-20260419-WA0013.mp4", "VID-20260421-0100.mp4"],
             "often": ["sık sık", "https://i.ibb.co/Y4xkYwLK/MG-20260419-WA0014.jpg", "VID-20260419-WA0015.mp4", "VID-20260421-WA0012.mp4"],
-            "really": ["gerçekten", "https://i.ibb.co/GfT7xW93/MG-20260419-WA0016.jpg", "VID-20260419-WA0019.mp4", "VID-20260421-WA0101.mp4"],
-            "quickly": ["hızlıca", "https://i.ibb.co/Kck4kb8Z/MG-20260419-WA0018.jpg", "VID-20260419-WA0017.mp4", "VID-20260421-WA0102.mp4"],
+            "really": ["gerçekten", "https://i.ibb.co/GfT7xW93/MG-20260419-WA0016.jpg", "VID-20260419-WA0019.mp4", "VID-20260421-0101.mp4"],
+            "quickly": ["hızlıca", "https://i.ibb.co/Kck4kb8Z/MG-20260419-WA0018.jpg", "VID-20260419-WA0017.mp4", "VID-20260421-0102.mp4"],
             "slowly": ["yavaşça", "https://i.ibb.co/xKMDJZsb/MG-20260419-WA0020.jpg", "VID-20260419-WA0021.mp4", "VID-20260421-WA0011.mp4"],
             "well": ["iyi", "https://i.ibb.co/WWy6nzwp/MG-20260419-WA0022.jpg", "VID-20260419-WA0023.mp4", "VID-20260421-WA0016.mp4"],
-            "always": ["her zaman", "https://i.ibb.co/PZWGfV7L/MG-20260419-WA0024.jpg", "VID-20260419-WA0025.mp4", "VID-20260421-WA0103.mp4"],
-            "sometimes": ["bazen", "https://i.ibb.co/k2bhjHNy/MG-20260419-WA0027.jpg", "VID-20260419-WA0027.mp4", "VID-20260421-WA0104.mp4"],
+            "always": ["her zaman", "https://i.ibb.co/PZWGfV7L/MG-20260419-WA0024.jpg", "VID-20260419-WA0025.mp4", "VID-20260421-0103.mp4"],
+            "sometimes": ["bazen", "https://i.ibb.co/k2bhjHNy/MG-20260419-WA0027.jpg", "VID-20260419-WA0027.mp4", "VID-20260421-0104.mp4"],
             "usually": ["genellikle", "https://i.ibb.co/jZZT7rtG/MG-20260419-WA0029.jpg", "VID-20260419-WA0029.mp4", "VID-20260421-WA0017.mp4"],
-            "together": ["birlikte", "https://i.ibb.co/jvf1KzWG/MG-20260419-WA0038.jpg", "VID-20260419-WA0039.mp4", "VID-20260421-WA0105.mp4"],
+            "together": ["birlikte", "https://i.ibb.co/jvf1KzWG/MG-20260419-WA0038.jpg", "VID-20260419-WA0039.mp4", "VID-20260421-0105.mp4"],
             "already": ["zaten", "https://i.ibb.co/Y4SHhvd7/MG-20260419-WA0040.jpg", "VID-20260419-WA0041.mp4", "VID-20260421-WA0019.mp4"],
-            "almost": ["neredeyse", "https://i.ibb.co/JR6fTbzT/MG-20260419-WA0043.jpg", "VID-20260419-WA0044.mp4", "VID-20260421-WA0106.mp4"],
-            "especially": ["özellikle", "https://i.ibb.co/N6XnCqVM/MG-20260419-WA0048.jpg", "VID-20260419-WA0049.mp4", "VID-20260421-WA0107.mp4"],
+            "almost": ["neredeyse", "https://i.ibb.co/JR6fTbzT/MG-20260419-WA0043.jpg", "VID-20260419-WA0044.mp4", "VID-20260421-0106.mp4"],
+            "especially": ["özellikle", "https://i.ibb.co/N6XnCqVM/MG-20260419-WA0048.jpg", "VID-20260419-WA0049.mp4", "VID-20260421-0107.mp4"],
             "probably": ["muhtemelen", "https://i.ibb.co/XrTf5MH6/MG-20260419-WA0050.jpg", "VID-20260419-WA0051.mp4", "VID-20260421-WA0010.mp4"],
             "finally": ["sonunda", "https://i.ibb.co/mCrcWws9/MG-20260419-WA0052.jpg", "VID-20260419-WA0053.mp4", "VID-20260421-WA0004.mp4"],
             "easily": ["kolayca", "https://i.ibb.co/JRk8FnZ1/MG-20260419-WA0054.jpg", "VID-20260419-WA0057.mp4", "VID-20260421-WA0004.mp4"],
@@ -166,14 +166,18 @@
         function init() {
             const listDiv = document.getElementById('wordList');
             if(!listDiv) return;
-            listDiv.innerHTML = ""; 
+            
+            let htmlContent = "";
             keys.forEach((w, i) => {
-                const div = document.createElement('div');
-                div.className = 'word-card';
-                div.innerHTML = `<span><b>${i+1}.</b> ${w}</span> <img class="play-btn" src="https://cdn-icons-png.flaticon.com/512/0/375.png">`;
-                div.onclick = () => openDetails(w);
-                listDiv.appendChild(div);
+                htmlContent += `
+                    <div class="word-card" onclick="openDetails('${w}')">
+                        <span><b>${i+1}.</b> ${w}</span> 
+                        <img class="play-btn" src="https://cdn-icons-png.flaticon.com/512/0/375.png">
+                    </div>`;
             });
+            
+            listDiv.innerHTML = htmlContent;
+
             if(location.hash) {
                 const hashWord = decodeURIComponent(location.hash.substring(1));
                 if(words[hashWord]) openDetails(hashWord);
@@ -210,8 +214,7 @@
             if(v.paused) { 
                 v.play().catch(e => console.log("Oynatma hatası:", e)); 
                 btn.style.opacity = '0'; 
-            }
-            else { 
+            } else { 
                 v.pause(); 
                 btn.style.opacity = '1'; 
             }
@@ -223,7 +226,4 @@
             document.body.style.overflow = 'auto';
             location.hash = "";
             document.getElementById('v1').pause();
-            document.getElementById('v2').pause();
-        }
-
-        function nextWo
+            document.getElementBy
