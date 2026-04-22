@@ -5,27 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tübitak Word List</title>
     <style>
-        body { font-family: sans-serif; background: #000; color: #fff; margin: 0; padding: 10px; }
-        h1 { font-size: 18px; text-align: center; color: #4CAF50; margin: 20px 0; text-transform: uppercase; }
-        .word-list { max-width: 500px; margin: 0 auto; }
-        .word-card { 
-            background: #121212; padding: 16px; border-radius: 12px; margin-bottom: 8px;
-            display: flex; justify-content: space-between; align-items: center;
-            border: 1px solid #1f1f1f; cursor: pointer;
-        }
-        .word-card b { color: #888; margin-right: 8px; }
-        .play-btn { width: 20px; height: 20px; opacity: 0.5; filter: invert(1); }
-        #details { display: none; position: fixed; inset: 0; background: #000; z-index: 999; overflow-y: auto; padding: 20px; }
-        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 10px; }
-        .close-x { font-size: 28px; color: #666; cursor: pointer; }
-        #wordTitle { font-size: 22px; text-transform: uppercase; margin: 0; }
-        .media-container { max-width: 450px; margin: 0 auto; }
-        .top-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-        .box { background: #0a0a0a; border: 1px solid #1f1f1f; border-radius: 15px; overflow: hidden; position: relative; }
+        body { font-family: sans-serif; background: #000; color: #fff; margin: 0; padding: 10px; -webkit-tap-highlight-color: transparent; }
+        h1 { font-size: 16px; text-align: center; color: #4CAF50; margin: 20px 0; text-transform: uppercase; letter-spacing: 1px; }
+        .word-list { max-width: 500px; margin: 0 auto; padding-bottom: 50px; }
+        .word-card { background: #111; padding: 14px; border-radius: 8px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; cursor: pointer; }
+        .word-card b { color: #666; margin-right: 6px; }
+        .play-btn { width: 18px; height: 18px; opacity: 0.4; filter: invert(1); }
+        #details { display: none; position: fixed; inset: 0; background: #000; z-index: 999; overflow-y: auto; padding: 15px; }
+        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        .close-x { font-size: 26px; color: #555; cursor: pointer; }
+        #wordTitle { font-size: 20px; text-transform: uppercase; margin: 0; letter-spacing: 1px; }
+        .media-container { max-width: 400px; margin: 0 auto; }
+        .top-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .box { background: #000; border: 1px solid #222; border-radius: 12px; overflow: hidden; position: relative; }
         .square { aspect-ratio: 1/1; }
         .video-box { width: 100%; aspect-ratio: 16/9; }
         img, video { width: 100%; height: 100%; object-fit: cover; }
-        .custom-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); font-size: 45px; }
+        .custom-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.1); font-size: 40px; color: #fff; cursor: pointer; z-index: 2; }
+        .nav-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 25px; }
+        .nav-btn { background: #111; color: #888; border: 1px solid #222; padding: 12px; border-radius: 8px; text-align: center; cursor: pointer; font-size: 14px; }
+        .nav-btn:active { background: #222; color: #fff; }
     </style>
 </head>
 <body>
@@ -47,14 +46,19 @@
                 </div>
             </div>
             <div class="box video-box">
-                <video id="v2" playsinline controls><source src="" type="video/mp4"></video>
+                <video id="v2" playsinline><source src="" type="video/mp4"></video>
+                <div id="v2Btn" class="custom-play" onclick="playMedia('v2')">▶</div>
+            </div>
+            <div class="nav-btns">
+                <div class="nav-btn" onclick="prevWord()">← Önceki</div>
+                <div class="nav-btn" onclick="nextWord()">Sonraki →</div>
             </div>
         </div>
     </div>
 
     <script>
         const words = {
-            "time": ["zaman", "https://i.ibb.co/5xnVn282/MG-20260414-WA0001.jpg", "VID-20260414-WA0010.mp4", "VID-20260421-WA0027.mp4"],
+            "time": ["zaman", "https://i.ibb.co/TDFW5wWg/MG-20260414-WA0000.jpg", "VID-20260414-WA0010.mp4", "VID-20260421-WA0027.mp4"],
             "year": ["yıl", "https://i.ibb.co/5xnVn282/MG-20260414-WA0001.jpg", "VID-20260414-WA0011.mp4", "VID-20260421-WA0028.mp4"],
             "people": ["insanlar", "https://i.ibb.co/d4zw3Mt5/MG-20260414-WA0002.jpg", "VID-20260414-WA0012.mp4", "VID-20260421-WA0029.mp4"],
             "way": ["yol", "https://i.ibb.co/PGq2n0WK/MG-20260414-WA0003.jpg", "VID-20260414-WA0013.mp4", "VID-20260421-WA0030.mp4"],
@@ -151,23 +155,21 @@
             "nearly": ["yaklaşık", "https://i.ibb.co/qYqgv6dG/MG-20260419-WA0061.jpg", "VID-20260419-WA0063.mp4", "VID-20260421-WA0003.mp4"],
             "currently": ["şu anda", "https://i.ibb.co/HDRz7vZN/MG-20260419-WA0073.jpg", "VID-20260419-WA0074.mp4", "VID-20260421-WA0007.mp4"],
             "clearly": ["netçe", "https://i.ibb.co/SwTBLYSP/MG-20260419-WA0075.jpg", "VID-20260419-WA0076.mp4", "VID-20260421-WA0014.mp4"],
-            "simply": ["basitçe", "https://i.ibb.co/6pMwtNd/MG-20260419-WA0059.jpg", "VID-20260419-WA0062.mp4", "VID-20260421-WA0008.mp4"],
+            "simply": ["basitçe", "https://i.ibb.co/qML2GydS/MG-20260419-WA0077.jpg", "VID-20260419-WA0078.mp4", "VID-20260421-WA0006.mp4"],
             "exactly": ["aynen", "https://i.ibb.co/9HHFmDRB/MG-20260419-WA0079.jpg", "VID-20260419-WA0080.mp4", "VID-20260421-WA0005.mp4"],
             "strongly": ["güçlüce", "https://i.ibb.co/xS0nzDrT/MG-20260419-WA0081.jpg", "VID-20260419-WA0082.mp4", "VID-20260421-WA0002.mp4"]
         };
 
-        const listDiv = document.getElementById('wordList');
+        const keys = Object.keys(words);
+        let currentIdx = -1;
 
         function init() {
-            listDiv.innerHTML = '';
-            Object.keys(words).forEach((w, i) => {
+            const listDiv = document.getElementById('wordList');
+            keys.forEach((w, i) => {
                 const div = document.createElement('div');
                 div.className = 'word-card';
-                div.innerHTML = `<span><b>${i+1}.</b> ${w} (${words[w][0]})</span> <img class="play-btn" src="https://cdn-icons-png.flaticon.com/512/0/375.png">`;
-                div.onclick = () => {
-                    location.hash = w;
-                    openDetails(w);
-                };
+                div.innerHTML = `<span><b>${i+1}.</b> ${w}</span> <img class="play-btn" src="https://cdn-icons-png.flaticon.com/512/0/375.png">`;
+                div.onclick = () => openDetails(w);
                 listDiv.appendChild(div);
             });
             if(location.hash) openDetails(location.hash.substring(1));
@@ -176,13 +178,22 @@
         function openDetails(w) {
             const d = words[w];
             if(!d) return;
-            document.getElementById('wordTitle').innerText = w;
+            currentIdx = keys.indexOf(w);
+            location.hash = w;
+
+            document.getElementById('wordTitle').innerText = w + " (" + d[0] + ")";
             document.getElementById('imgSrc').src = d[1];
-            document.getElementById('v1').src = 'videolar/' + d[2];
-            document.getElementById('v2').src = 'videolar/' + d[3];
+            
+            const v1 = document.getElementById('v1');
+            const v2 = document.getElementById('v2');
+            v1.src = 'videolar/' + d[2];
+            v2.src = 'videolar/' + d[3];
+            v1.load(); v2.load();
+
+            document.getElementById('v1Btn').style.opacity = '1';
+            document.getElementById('v2Btn').style.opacity = '1';
             document.getElementById('details').style.display = 'block';
             document.body.style.overflow = 'hidden';
-            document.getElementById('v1Btn').style.opacity = '1';
         }
 
         function playMedia(id) {
@@ -190,13 +201,17 @@
             const btn = document.getElementById(id + 'Btn');
             if(v.paused) { v.play(); btn.style.opacity = '0'; }
             else { v.pause(); btn.style.opacity = '1'; }
+            v.onended = () => { btn.style.opacity = '1'; };
         }
+
+        function nextWord() { if(currentIdx < keys.length - 1) openDetails(keys[currentIdx + 1]); }
+        function prevWord() { if(currentIdx > 0) openDetails(keys[currentIdx - 1]); }
 
         function closeDetails() {
             document.getElementById('details').style.display = 'none';
             document.body.style.overflow = 'auto';
             location.hash = '';
-            document.querySelectorAll('video').forEach(v => { v.pause(); v.currentTime = 0; });
+            document.querySelectorAll('video').forEach(v => v.pause());
         }
 
         window.onhashchange = () => { if(!location.hash) closeDetails(); };
