@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tübitak Word List</title>
     <style>
-        body { font-family: sans-serif; background: #000; color: #fff; margin: 0; padding: 10px; -webkit-tap-highlight-color: transparent; }
+        /* Engellemeler kaldırıldı, standart akışa dönüldü */
+        body { 
+            font-family: sans-serif; 
+            background: #000; 
+            color: #fff; 
+            margin: 0; 
+            padding: 10px; 
+            -webkit-tap-highlight-color: transparent; 
+        }
         h1 { font-size: 16px; text-align: center; color: #fff; margin: 20px 0; text-transform: uppercase; letter-spacing: 1px; }
         
         .word-list { max-width: 500px; margin: 0 auto; padding-bottom: 50px; }
@@ -209,3 +217,20 @@
             else { v.pause(); btn.style.opacity = '1'; }
             v.onended = () => { btn.style.opacity = '1'; };
         }
+
+        function closeDetails() {
+            document.getElementById('details').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            location.hash = "";
+            document.getElementById('v1').pause();
+            document.getElementById('v2').pause();
+        }
+
+        function nextWord() {
+            currentIdx = (currentIdx + 1) % keys.length;
+            openDetails(keys[currentIdx]);
+        }
+
+        function prevWord() {
+            currentIdx = (currentIdx - 1 + keys.length) % keys.length;
+            openDetails(keys
