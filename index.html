@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tübitak Word List</title>
     <style>
-        body { font-family: sans-serif; background: #000; color: #fff; margin: 0; padding: 10px; -webkit-tap-highlight-color: transparent; }
+        body { font-family: sans-serif; background: #000; color: #fff; margin: 0; padding: 10px; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
         h1 { font-size: 16px; text-align: center; color: #fff; margin: 20px 0; text-transform: uppercase; letter-spacing: 1px; }
         
         .word-list { max-width: 500px; margin: 0 auto; padding-bottom: 50px; }
@@ -23,7 +23,7 @@
         .box { background: #000; border: 1px solid #222; border-radius: 12px; overflow: hidden; position: relative; }
         .square { aspect-ratio: 1/1; }
         .video-box { width: 100%; aspect-ratio: 16/9; }
-        img, video { width: 100%; height: 100%; object-fit: cover; }
+        img, video { width: 100%; height: 100%; object-fit: cover; -webkit-user-drag: none; }
         
         .custom-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.1); font-size: 40px; color: #fff; cursor: pointer; z-index: 2; }
         
@@ -32,7 +32,7 @@
         .nav-btn:active { background: #222; color: #fff; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
     <h1>MY AWESOME TÜBITAK TEAM WORD LIST</h1>
     <div id="wordList" class="word-list"></div>
@@ -44,14 +44,14 @@
         </div>
         <div class="media-container">
             <div class="top-row">
-                <div class="box square"><img id="imgSrc" src=""></div>
+                <div class="box square"><img id="imgSrc" src="" draggable="false"></div>
                 <div class="box square">
-                    <video id="v1" playsinline><source src="" type="video/mp4"></video>
+                    <video id="v1" playsinline disablePictureInPicture controlsList="nodownload"><source src="" type="video/mp4"></video>
                     <div id="v1Btn" class="custom-play" onclick="playMedia('v1')">▶</div>
                 </div>
             </div>
             <div class="box video-box">
-                <video id="v2" playsinline><source src="" type="video/mp4"></video>
+                <video id="v2" playsinline disablePictureInPicture controlsList="nodownload"><source src="" type="video/mp4"></video>
                 <div id="v2Btn" class="custom-play" onclick="playMedia('v2')">▶</div>
             </div>
             <div class="nav-btns">
@@ -132,7 +132,7 @@
             "large": ["geniş", "https://i.ibb.co/XxYnz81p/MG-20260418-WA0015.jpg", "VID-20260418-WA0036.mp4", "VID-20260421-WA0015.mp4"],
             "next": ["sonraki", "https://i.ibb.co/MDFY3BQV/MG-20260418-WA0016.jpg", "VID-20260418-WA0038.mp4", "VID-20260421-WA0093.mp4"],
             "early": ["erken", "https://i.ibb.co/4RLvJ9DK/MG-20260418-WA0017.jpg", "VID-20260418-WA0040.mp4", "VID-20260421-WA0094.mp4"],
-            "young": ["genç", "https://i.ibb.co/vxrr1KSK/MG-20260418-WA0022.jpg", "VID-20260418-WA0044.mp4", "VID-20260421-WA0095.mp4"],
+            "young": ["genç", "https://i.ibb.co/vxrr1KSK/MG-20260418-WA0022.jpg", "VID-20260418-WA0044.mp4", "VID-20260421-Young.mp4"],
             "important": ["önemli", "https://i.ibb.co/Dfw564Nr/MG-20260419-WA0000.jpg", "VID-20260419-WA0001.mp4", "VID-20260421-WA0096.mp4"],
             "few": ["az", "https://i.ibb.co/W44mPNy7/MG-20260419-WA0002.jpg", "VID-20260419-WA0003.mp4", "VID-20260421-WA0097.mp4"],
             "public": ["kamusal", "https://i.ibb.co/CpXBpPLM/MG-20260419-WA0004.jpg", "VID-20260419-WA0005.mp4", "VID-20260421-WA0013.mp4"],
@@ -178,6 +178,9 @@
                 listDiv.appendChild(div);
             });
             if(location.hash) openDetails(location.hash.substring(1));
+            
+            // BURAK - KORUMA KALKANI
+            applyProtections();
         }
 
         function openDetails(w) {
@@ -217,11 +220,4 @@
             document.getElementById('details').style.display = 'none';
             document.body.style.overflow = 'auto';
             location.hash = '';
-            document.querySelectorAll('video').forEach(v => v.pause());
-        }
-
-        window.onhashchange = () => { if(!location.hash) closeDetails(); };
-        init();
-    </script>
-</body>
-</html>
+            document.qu
