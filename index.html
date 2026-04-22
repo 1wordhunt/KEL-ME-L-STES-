@@ -41,12 +41,12 @@
             <div class="top-row">
                 <div class="box square"><img id="imgSrc" src=""></div>
                 <div class="box square">
-                    <video id="v1" playsinline><source src="" type="video/mp4"></video>
+                    <video id="v1" playsinline><source id="v1s" src="" type="video/mp4"></video>
                     <div id="v1Btn" class="custom-play" onclick="playMedia('v1')">▶</div>
                 </div>
             </div>
             <div class="box video-box">
-                <video id="v2" playsinline><source src="" type="video/mp4"></video>
+                <video id="v2" playsinline><source id="v2s" src="" type="video/mp4"></video>
                 <div id="v2Btn" class="custom-play" onclick="playMedia('v2')">▶</div>
             </div>
             <div class="nav-btns">
@@ -165,6 +165,7 @@
 
         function init() {
             const listDiv = document.getElementById('wordList');
+            if(!listDiv) return;
             listDiv.innerHTML = ""; 
             keys.forEach((w, i) => {
                 const div = document.createElement('div');
@@ -173,7 +174,10 @@
                 div.onclick = () => openDetails(w);
                 listDiv.appendChild(div);
             });
-            if(location.hash) openDetails(decodeURIComponent(location.hash.substring(1)));
+            if(location.hash) {
+                const hashWord = decodeURIComponent(location.hash.substring(1));
+                if(words[hashWord]) openDetails(hashWord);
+            }
         }
 
         function openDetails(w) {
@@ -188,9 +192,12 @@
             const v1 = document.getElementById('v1');
             const v2 = document.getElementById('v2');
             
-            v1.src = 'videolar/' + d[2];
-            v2.src = 'videolar/' + d[3];
-            v1.load(); v2.load();
+            // Source güncelleme ve reload işlemi
+            document.getElementById('v1s').src = 'videolar/' + d[2];
+            document.getElementById('v2s').src = 'videolar/' + d[3];
+            
+            v1.load(); 
+            v2.load();
 
             document.getElementById('v1Btn').style.opacity = '1';
             document.getElementById('v2Btn').style.opacity = '1';
@@ -201,8 +208,14 @@
         function playMedia(id) {
             const v = document.getElementById(id);
             const btn = document.getElementById(id + 'Btn');
-            if(v.paused) { v.play(); btn.style.opacity = '0'; }
-            else { v.pause(); btn.style.opacity = '1'; }
+            if(v.paused) { 
+                v.play().catch(e => console.log("Oynatma hatası:", e)); 
+                btn.style.opacity = '0'; 
+            }
+            else { 
+                v.pause(); 
+                btn.style.opacity = '1'; 
+            }
             v.onended = () => { btn.style.opacity = '1'; };
         }
 
@@ -211,20 +224,4 @@
             document.body.style.overflow = 'auto';
             location.hash = "";
             document.getElementById('v1').pause();
-            document.getElementById('v2').pause();
-        }
-
-        function nextWord() {
-            currentIdx = (currentIdx + 1) % keys.length;
-            openDetails(keys[currentIdx]);
-        }
-
-        function prevWord() {
-            currentIdx = (currentIdx - 1 + keys.length) % keys.length;
-            openDetails(keys[currentIdx]);
-        }
-
-        window.onload = init;
-    </script>
-</body>
-</html>
+            document.getElementById
