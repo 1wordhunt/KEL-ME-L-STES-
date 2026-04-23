@@ -41,12 +41,12 @@
             <div class="top-row">
                 <div class="box square"><img id="imgSrc" src=""></div>
                 <div class="box square">
-                    <video id="v1" playsinline><source src="" type="video/mp4"></video>
+                    <video id="v1" playsinline></video>
                     <div id="v1Btn" class="custom-play" onclick="playMedia('v1')">▶</div>
                 </div>
             </div>
             <div class="box video-box">
-                <video id="v2" playsinline><source src="" type="video/mp4"></video>
+                <video id="v2" playsinline></video>
                 <div id="v2Btn" class="custom-play" onclick="playMedia('v2')">▶</div>
             </div>
             <div class="nav-btns">
@@ -201,8 +201,14 @@
         function playMedia(id) {
             const v = document.getElementById(id);
             const btn = document.getElementById(id + 'Btn');
-            if(v.paused) { v.play(); btn.style.opacity = '0'; }
-            else { v.pause(); btn.style.opacity = '1'; }
+            if(v.paused) { 
+                v.play().catch(e => console.log("Video oynatılamadı:", e)); 
+                btn.style.opacity = '0'; 
+            }
+            else { 
+                v.pause(); 
+                btn.style.opacity = '1'; 
+            }
             v.onended = () => { btn.style.opacity = '1'; };
         }
 
@@ -223,4 +229,9 @@
             currentIdx = (currentIdx - 1 + keys.length) % keys.length;
             openDetails(keys[currentIdx]);
         }
-        
+
+        // Doğrudan başlat
+        init();
+    </script>
+</body>
+</html>
